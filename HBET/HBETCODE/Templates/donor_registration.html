@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      background-color: #333;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    .menu {
+      display: flex;
+    }
+
+    .menu a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    .profile-button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+     .form-container {
+        display: flex;
+    }
+
+    .form-column {
+        flex: 1;
+        padding: 10px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 95%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .form-group input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        width: 20%;
+    }
+  </style>
+</head>
+<body>
+{%block content%}
+  <div class="header">
+    <div class="menu">
+      <a href="/donorregistration">Donor Registration Form</a>
+      <a href = "/donordetails">Donor Details</a>
+      <a href="#">Add Donation</a>
+    </div>
+    <button class="profile-button">Profile</button>
+  </div>
+
+  <div id="content">
+    <center><h1>Donor Registration Form</h1> </center>
+    <form id="donor_reg_form" action="/insertdonor" method="post">
+      {% csrf_token %}
+
+        <div class="form-container">
+          {% for message in messages %}
+
+            <div class="alert alert-success" id="alertmessage">
+                <a class="close" href="#" data-dismiss="alert"></a>
+                   {{ message }}
+            </div>
+          {% endfor %}
+            <div class="form-column">
+                <fieldset>
+
+                  <div class="form-group">
+                    <label for="first-name">First Name *</label>
+                    <input type="text" id="first-name" name="first-name" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" id="last-name" name="last-name">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="dob">Date of Birth *</label>
+                    <input type="date" id="dob" name="dob" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="dom">Date of Marriage</label>
+                    <input type="date" id="dom" name="dom">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="spouse-name">Spouse Name</label>
+                    <input type="text" id="spouse-name" name="spouse-name">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="address-1">Address 1 *</label>
+                    <input type="text" id="address-1" name="address-1" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="address-2">Address 2 *</label>
+                    <input type="text" id="address-2" name="address-2" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="dom">Date of registration</label>
+                    <input type="date" id="dor" name="dor">
+                  </div>
+                </fieldset>
+            </div>
+
+            <div class="form-column">
+                <fieldset>
+
+                    <div class="form-group">
+                    <label for="mobile-1">Mobile No. 1 *</label>
+                    <input type="text" id="mobile-1" name="mobile-1" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="mobile-2">Mobile No. 2</label>
+                    <input type="text" id="mobile-2" name="mobile-2">
+                  </div>
+
+                     <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                  </div>
+
+                    <div class="form-group">
+                    <label for="state">State *</label>
+                    <input type="text" id="state" name="state" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="city">City *</label>
+                    <input type="text" id="city" name="city" required>
+                  </div>
+
+                    <div class="form-group">
+                    <label for="pincode">Pin Code *</label>
+                    <input type="text" id="pincode" name="pincode" required>
+                  </div>
+
+
+
+                  <div class="form-group">
+                    <label for="aadhar">Aadhar Card No.</label>
+                    <input type="text" id="aadhar" name="aadhar">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="pan">PAN Card No. *</label>
+                    <input type="text" id="pan" name="pan" required>
+                  </div>
+
+
+                </fieldset>
+            </div>
+        </div>
+
+
+<center>
+        <div class="form-group">
+            <input type="submit" value="Submit">
+        </div>
+  </center>
+    </form>
+  </div>
+
+
+  <script>
+    document.getElementById("donor_reg_form").addEventListener("submit", function(event) {
+      var mobileNumberInput = document.getElementById("mobile-1");
+      var mobileNumber = mobileNumberInput.value;
+
+      // Define the regular expression pattern for mobile number validation
+      var mobileNumberPattern = /^[1-9]\d{9}$/;
+
+      // Check if the mobile number matches the pattern
+      if (!mobileNumberPattern.test(mobileNumber)) {
+        alert("Invalid mobile number! Please enter a valid 10-digit mobile number.");
+        event.preventDefault(); // Prevent form submission
+      }
+    });
+
+  </script>
+{% endblock %}
+</body>
+</html>

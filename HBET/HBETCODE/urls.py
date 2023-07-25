@@ -1,0 +1,14 @@
+from django.urls import path
+from . import views
+
+urlpatterns = {
+    path('', views.adminlogin, name='admin login'),
+    path('home', views.Home, name='home'),
+    path('donordetails', views.donor_details, name='donor details'),
+    path('editdonordetails', views.edit_donor_details, name='edit donor details'),
+    path('updatedonordetailsdb', views.update_donor_details_db, name='update donor details in db'),
+    path('donorregistration', views.donor_registration, name='donor registration'),
+    path('insertdonor', views.insert_donor_details, name='insert donor'),
+    path('admin_authentication', views.admin_authentication, name='admin_authentication')
+
+}

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Example</title>
+  <style>
+
+
+
+
+#dataTable td {
+  text-align: center;
+}
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      background-color: #333;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    .menu {
+      display: flex;
+    }
+
+    .menu a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    .profile-button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+     .form-container {
+        display: flex;
+    }
+
+    .form-column {
+        flex: 1;
+        padding: 10px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .form-group input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        width: 20%;
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href ="{% static 'datatables/1.10.22/css/jquery.dataTables.min.css' %}">
+</head>
+<body>
+{%block content%}
+  <div class="header">
+    <div class="menu">
+      <a href="/donorregistration">Donor Registration Form</a>
+      <a href = "/donordetails">Donor Details</a>
+      <a href="#">Contact</a>
+    </div>
+    <button class="profile-button">Profile</button>
+  </div>
+
+
+<button id="exportBtn" style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button" onclick="exportToExcel()">Export to CSV</button>
+<button style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button" onclick ="redirect()">Edit</button>
+
+   <div id="content">
+
+  <table id="dataTable" class="display nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Date Of Birth</th>
+                <th>Date Of Marriage</th>
+                <th>Spouse Name</th>
+                <th>Address 1</th>
+                <th>Address 2</th>
+                <th>Date Of Registration</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Pincode</th>
+                <th>Mobile Number 1</th>
+                <th>Mobile Number 2</th>
+                <th>Aadhar Card Number</th>
+                <th>Pan Card Number</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for data in rows %}
+          <tr>
+            <td>{{ data.first_name }}</td>
+            <td>{{ data.last_name }}</td>
+            <td>{{ data.full_name }}</td>
+            <td>{{ data.email }}</td>
+            <td>{{ data.dob }}</td>
+            <td>{{ data.dom }}</td>
+            <td>{{ data.spouse_name }}</td>
+            <td>{{ data.address1 }}</td>
+            <td>{{ data.address2 }}</td>
+            <td>{{ data.dor }}</td>
+            <td>{{ data.city }}</td>
+            <td>{{ data.state }}</td>
+            <td>{{ data.pin_code }}</td>
+            <td>{{ data.mobile1 }}</td>
+            <td>{{ data.mobile2 }}</td>
+            <td>{{ data.aadhar_card }}</td>
+            <td>{{ data.pan_card }}</td>
+
+          </tr>
+          {% endfor %}
+
+
+
+        </tbody>
+    </table>
+
+
+  </div>
+
+ </center>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+ <script src="{% static 'datatables/1.10.22/js/jquery.dataTables.min.js' %}"></script>
+
+  <script>
+
+function downloadExcelFile(data, filename) {
+  var blob = new Blob([data], { type: "application/vnd.ms-excel" });
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(blob, filename + ".xls");
+  } else {
+    var link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename + ".xls";
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+}
+
+function exportToExcel() {
+  var table = document.getElementById("dataTable");
+  var rows = Array.from(table.querySelectorAll("tbody tr"));
+
+  var headers = Array.from(table.querySelectorAll("thead th")).map(function(th) {
+    return th.textContent;
+  });
+
+  var data = [headers.join("\t")];
+
+  rows.forEach(function(row) {
+    var rowData = Array.from(row.children).map(function(cell) {
+      return cell.textContent;
+    });
+    data.push(rowData.join("\t"));
+  });
+
+  var excelData = data.join("\r\n");
+  var filename = "data";
+
+  downloadExcelFile(excelData, filename);
+}
+
+function exportToCSV() {
+
+   var table = document.getElementById("dataTable");
+  var rows = table.querySelectorAll("tbody tr");
+  var headerRow = Array.from(table.querySelectorAll("thead th")).map(function(th) {
+    return th.textContent;
+  });
+  var csvContent = "data:text/csv;charset=utf-8,";
+
+  // Build the header row
+  var csvHeader = headerRow.join(",");
+  csvContent += csvHeader + "\r\n";
+
+  // Build the data rows
+  rows.forEach(function(row) {
+    var rowData = Array.from(row.children).map(function(cell) {
+      return cell.textContent;
+    });
+    var csvRow = rowData.join(",");
+    csvContent += csvRow ;
+  });
+
+  // Create a CSV file and trigger the download
+  var encodedUri = encodeURI(csvContent);
+  var link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "data.csv");
+  document.body.appendChild(link);
+  link.click();
+}
+
+
+
+$(document).ready(function() {
+  $('#dataTable').DataTable({
+
+      scrollY: '500px',
+      scrollX: '11px',
+      paging: false,
+
+
+    });
+});
+
+function redirect(){
+window.location.href = "/editdonordetails";
+
+}
+  </script>
+{% endblock %}
+</body>
+</html>
