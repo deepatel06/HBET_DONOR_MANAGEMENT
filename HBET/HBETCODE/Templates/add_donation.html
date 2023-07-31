@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+/>
+
+  <title>Add Donation</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        }
+  
+      .header {
+        background-color: #0322d3;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+      }
+  
+      .menu {
+        display: flex;
+      }
+  
+      .menu a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+      }
+
+      .menu a:hover{
+      background-color: #fd0404;
+    }
+  
+      .profile-button {
+        background-color: #fd0404;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+   
+    form {
+        max-width: 400px;
+        margin: 0 auto;
+        margin-right: 80px;
+        margin-top: 10px;
+        border: solid #cccccce5;
+        
+        
+    }
+
+    label {
+        margin-top: 7px;
+        display: block;
+        margin-bottom: 5px;
+        margin-left: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    select,
+    textarea {
+        width: 90%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-left: 5px;
+    }
+
+    input[type="submit"] {
+        padding: 10px;
+        background-color: #0322d3;
+        color: #fff;
+        border: none;
+        width: 95%;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #3b1d8d;
+    }
+    
+    .art{
+        margin-top: -60%;
+        margin-left: 30px;
+       
+        height: 50%;
+        width: 40%;
+        }
+        .art image{
+            height: 50%;
+            width: 40%;
+        }
+        form h1{
+          text-align: center;
+      }
+
+      
+
+</style>
+
+</head>
+
+<body> 
+    
+  <div class="header">
+    <div class="menu">
+      <a href="/donorregistration">Donor Registration Form</a>
+      <a href = "/donordetails">Donor Details</a>
+      <a href="/add_donation">Add Donation</a>
+      <a href="/view_donation">View Donation </a>
+    </div>
+    <button class="profile-button">Profile</button>
+  </div>
+
+
+
+<div class="form-container">
+  {% for message in messages %}
+
+    <div class="animate__animated animate__bounceInUp" id="" style="color:#fff; background-color: #0322d3; width:25%; margin-top:4px; margin-left:290px; border-radius:30px; text-align:center; padding:10px; >
+        <a class="close" href="#" data-dismiss="alert"></a>
+           {{ message }}
+    </div>
+  {% endfor %}
+<form action="/insert_donation" method="post">
+  {% csrf_token %}
+    <h1> Donation Form </h1>
+    <label for="donation_type">Type of Donation:</label>
+    <select id="donation_type" name="donation_type" required>
+        <option value="">-- Select Donation Type --</option>
+        <option value="money">Money</option>
+        <option value="clothes">Clothes</option>
+        <option value="food">Food</option>
+        <option value="Other">Other</option>
+        <!-- Add more options as needed -->
+    </select>
+    
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname" required>
+
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname" required>
+
+        
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="phone">Contact No:</label>
+        <input type="tel" id="phone" name="phone" required>
+
+        <label for="payment_type">Type of Payment:</label>
+        <select id="payment_type" name="payment_type" required>
+            <option value="">-- Select Payment Type  --</option>
+            <option value="Cash">Cash</option>
+            <option value="Cheque">Cheque</option>
+            <option value="UPI">UPI</option>
+            <option value="NetBanking">Net Banking</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="amount">Amount in Rupees:</label>
+        <input type="number" id="amount" name="amount" required style="width: 93% ; border: 1px solid #ccc; border-radius: 5px; height: 30px; margin-left: 3px;">
+
+        <label for="dod">Date of Donation:</label>
+            <input type="date" id="dod" name="dod" value="">
+
+        
+
+        <label for="pan">PAN Number:</label>
+        <input type="text" id="pan" name="pan" required>
+
+        <label for="Remarks">Remarks:</label>
+        <textarea id="Remarks" name="Remarks" rows="4"></textarea>
+    
+
+    <input type="submit" value="Submit">
+</form>
+<div class="art">
+<img src="https://cdni.iconscout.com/illustration/premium/thumb/charity-and-donation-3142069-2621398.png" alt="">
+
+</div>
+</body>
+
+</html>

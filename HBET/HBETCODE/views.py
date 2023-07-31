@@ -1,7 +1,7 @@
 from datetime import datetime, date
 from time import strptime
 from urllib import request
-
+from json import dumps
 import pymysql
 from django.contrib import messages
 import json
@@ -25,7 +25,7 @@ def admin_authentication(request):
         password = request.POST['password']
 
         if models.admin_details.objects.filter(email=username).exists() and models.admin_details.objects.filter(password=password).exists():
-            return HttpResponseRedirect('/home')
+            return HttpResponseRedirect('/donorregistration')
 
 
         else:
@@ -90,7 +90,8 @@ def edit_donor_details(request):
     donor_data = cur.fetchall()
     conn.commit()
     conn.close()
-    return render(request, "edit_donor_details.html",{'rows': donor_data})
+    dataJSON = dumps(donor_data,cls=DateEncoder)
+    return render(request, "edit_donor_details.html",{'rows': donor_data,'dataJSON': dataJSON})
 @csrf_exempt
 def update_donor_details_db(request):
 
@@ -108,7 +109,7 @@ def update_donor_details_db(request):
             spouse_name = f_data[i]['Spouse Name']
             address1 = f_data[i]['Address 1']
             address2 = f_data[i]['Address 2']
-            dor = datetime.strptime(f_data[i]['Date Of Registration'], '%B %d, %Y').date()
+            dor = (f_data[i]['Date Of Registration'])
             city = f_data[i]['City']
             state = f_data[i]['State']
             pin_code = f_data[i]['Pincode']
@@ -117,12 +118,13 @@ def update_donor_details_db(request):
             aadhar_card = f_data[i]['Aadhar Card Number']
             pan_card = f_data[i]['Pan Card Number']
             email = f_data[i]['Email']
-            print(first_name, last_name, dob, dom, spouse_name, address1, address2, dor, city,
+            password = f_data[i]['Password']
+            print(first_name, last_name,spouse_name, address1, address2,city,dob,dom,dor,
                   state, pin_code, mobile2,
-                  mobile1, aadhar_card, pan_card,email,"in updateee")
+                  mobile1, aadhar_card, pan_card,password,email,"in updateee")
 
             cur, conn = for_open_db_connection()
-            query = f"update hbet.donor_details set first_name = '{first_name}', last_name = '{last_name}',full_name ='{full_name}', dob= '{dob}', dom = '{dom}', spouse_name = '{spouse_name}',address1 = '{address1}',address2 = '{address2}', dor ='{dor}',city = '{city}',state = '{state}', pin_code = '{pin_code}',mobile2 ='{mobile2}',mobile1 = '{mobile1}',aadhar_card = {aadhar_card}, pan_card='{pan_card}',email = '{email}' where id = {id+1}; "
+            query = f"update hbet.donor_details set first_name = '{first_name}', last_name = '{last_name}',full_name ='{full_name}', spouse_name = '{spouse_name}',address1 = '{address1}',address2 = '{address2}',city = '{city}',state = '{state}', pin_code = '{pin_code}',mobile2 ='{mobile2}',mobile1 = '{mobile1}',aadhar_card = {aadhar_card}, pan_card='{pan_card}',email = '{email}',dob ='{dob}',dom ='{dom}',dor ='{dor}'  where id = {id+1}; "
             print(query)
             cur.execute(query)
             conn.commit()
@@ -132,6 +134,36 @@ def update_donor_details_db(request):
 
     return JsonResponse({'status': 'success'})
 
+def add_donation(request):
+
+    return render(request, "add_donation.html")
+
+def insert_donation(request):
+    if request.method == 'POST':
+        donation_type = request.POST['donation_type']
+        first_name = request.POST['firstname']
+        last_name = request.POST['lastname']
+        contactno = request.POST['phone']
+        typeofpayment = request.POST['payment_type']
+        amount = request.POST['amount']
+        dateofdonation = request.POST['dod']
+        
+        pan_no = request.POST['pan']
+        email = request.POST['email']
+        remarks  = request.POST['Remarks']
+        print(donation_type, first_name, last_name, contactno, typeofpayment, amount, dateofdonation, pan_no, email,remarks)
+
+        donation = models.Donation(first_name=first_name, last_name=last_name, type_of_donation=donation_type,
+                                    type_of_payment =typeofpayment,amount =amount, date_of_donation=dateofdonation, contact_no=contactno,
+                                    pan_no=pan_no, email=email,remarks=remarks)
+        donation.save()
+
+        messages.success(request, 'Donation added successfully.')
+        return HttpResponseRedirect('/add_donation')
+
+def viewDonation(request):
+    donation_data = models.Donation.objects.all()
+    return render(request, "view_donation.html", {'rows': donation_data})
 
 def for_open_db_connection():
 
@@ -142,4 +174,4 @@ def for_open_db_connection():
         except Exception as error:
             print(error)
 
-        return cur,conn
+        return cur,conn 

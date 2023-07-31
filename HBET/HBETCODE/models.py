@@ -30,3 +30,20 @@ class DonorDetails(models.Model):
 
     class Meta:
         db_table = 'donor_details'
+
+class Donation(models.Model):
+    type_of_donation = models.CharField(max_length=45)
+    first_name = models.CharField(max_length=45)
+    last_name = models.CharField(max_length=45)
+    email = models.CharField(max_length=45)
+    contact_no = models.CharField(max_length=15)
+    type_of_payment = models.CharField(max_length=45)
+    amount = models.IntegerField()
+    date_of_donation = models.DateField()
+    pan_no = models.CharField(max_length=45)
+    remarks = models.CharField(max_length=45, blank=True, null=True)
+    donation_id = models.AutoField(primary_key=True)
+
+    class Meta:
+        
+        db_table = 'donation'

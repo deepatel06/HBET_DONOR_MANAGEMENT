@@ -17,16 +17,19 @@
     .container {
       width: 300px;
       margin: 0 auto;
-      margin-top: 100px;
+      margin-top: 110px;
+      margin-right: 100px;
       background-color: #fff;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 80px;
+      border-radius: 50px;
+      box-shadow:  15px 15px 30px #938989,
+             -15px -15px 30px #ffffff
     }
 
     h2 {
       text-align: center;
       margin-bottom: 20px;
+      margin-top: 60px;
     }
 
     .form-group {
@@ -52,15 +55,30 @@
       padding: 8px;
       border-radius: 3px;
       border: none;
-      background-color: #4CAF50;
+      background-color: #0322d3;
       color: #fff;
       font-weight: bold;
       cursor: pointer;
     }
 
     .form-group input[type="submit"]:hover {
-      background-color: #45a049;
+      background-color: #3b1d8d;
     }
+    #human{
+      height: 100px;
+      width: 125px;
+      margin: -30px;
+      margin-left: 85px;
+      padding: 0px;
+    }
+    .vector{
+      height: 50%;
+      width: 40%;
+      margin-top: -456px;
+      margin-left: 115px;
+
+    }
+    
   </style>
 </head>
 <body>
@@ -74,12 +92,14 @@
     </center>
 
 {% endfor %}
+<img id="human" src="https://cdn0.iconfinder.com/data/icons/bold-purple-free-samples/32/User_Avatar_Human_Profile_Face_Circle-256.png" alt="" style="">
     <h2>Admin Login</h2>
 {% block content %}
 
     <form method="POST" action="/admin_authentication">
     {% csrf_token %}
       <div class="form-group">
+       
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
       </div>
@@ -92,7 +112,11 @@
       </div>
     </form>
   </div>
-</body>
+  <div class="vector">
+    <img src="https://cdni.iconscout.com/illustration/premium/thumb/login-page-4468581-3783954.png" alt="">
+
+  </div>
+    </body>
 </html>
 {% endblock %}
 {% load static %}
