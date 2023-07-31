@@ -10,8 +10,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from HBET.HBETCODE import models
-from HBET.HBETCODE.utilities.db import get_db_connection
+from HBETCODE import models
+from HBETCODE.utilities.db import get_db_connection
 
 
 # Create your views here.
