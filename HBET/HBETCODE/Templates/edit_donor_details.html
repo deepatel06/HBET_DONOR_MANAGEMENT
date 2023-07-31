@@ -4,14 +4,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu Example</title>
+  <title>Edit Donor Details</title>
   <style>
 
 
+#dataTable{
+  height: 600px;
+  
+  overflow: auto;
+}
 
-
-#dataTable td {
+#dtable{
+  width: 100%;
+  border-collapse: collapse;
+ 
+  
+}
+#dtable thead{
+  background-color: #f2f2f2;
+  
+}
+#dtable th{
+  padding: 10px;
   text-align: center;
+  border-bottom: 1px solid #ccc;
+  
+}
+
+#dtable tbody tr{
+  background-color: #fff;
+  width: max-content;
+}
+#dtable td{
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  
+}
+#dtable tbody tr:nth-child(even){
+  background-color: #f2f2f2;
+}
+#dtable tbody tr:hover {
+  background-color: #e0e0e0;
+}
+tr{
+  width: max-content;
 }
     body {
       font-family: Arial, sans-serif;
@@ -21,11 +57,12 @@
     }
 
     .header {
-      background-color: #333;
+      background-color: #0322d3;
       color: #fff;
       display: flex;
       justify-content: space-between;
       padding: 10px;
+      margin-right: 1px;
     }
 
     .menu {
@@ -38,8 +75,12 @@
       margin: 0 10px;
     }
 
+    .menu a:hover{
+      background-color: #fd0404;
+    }
+
     .profile-button {
-      background-color: #4CAF50;
+      background-color: #fd0404;
       color: #fff;
       border: none;
       padding: 10px;
@@ -86,7 +127,8 @@
     <div class="menu">
       <a href="/donorregistration">Donor Registration Form</a>
       <a href = "/donordetails">Donor Details</a>
-      <a href="#">Contact</a>
+      <a href="/add_donation">Add donation</a>
+      <a href="/view_donation">View Donation </a>
     </div>
     <button class="profile-button">Profile</button>
   </div>
@@ -97,70 +139,21 @@
 
    <div id="content">
 <center><h1>Edit Donor Details</h1></center>
-  <table id="dataTable" class="display nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Date Of Birth</th>
-                <th>Date Of Marriage</th>
-                <th>Spouse Name</th>
-                <th>Address 1</th>
-                <th>Address 2</th>
-                <th>Date Of Registration</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Pincode</th>
-                <th>Mobile Number 1</th>
-                <th>Mobile Number 2</th>
-                <th>Aadhar Card Number</th>
-                <th>Pan Card Number</th>
-
-
-            </tr>
-        </thead>
-        <tbody>
-
-            {% for data in rows %}
-          <tr>
-
-            <td>{{ data.id }}</td>
-            <td id ="idd"  contenteditable="true">{{ data.first_name }}</td>
-            <td contenteditable="true">{{ data.last_name }}</td>
-            <td contenteditable="true">{{ data.full_name }}</td>
-            <td contenteditable="true">{{ data.email }}</td>
-            <td contenteditable="true">{{ data.dob }}</td>
-            <td contenteditable="true">{{ data.dom }}</td>
-
-
-            <td contenteditable="true">{{ data.spouse_name }}</td>
-            <td contenteditable="true">{{ data.address1 }}</td>
-            <td contenteditable="true">{{ data.address2 }}</td>
-            <td contenteditable="true">{{ data.dor }}</td>
-            <td contenteditable="true">{{ data.city }}</td>
-            <td contenteditable="true">{{ data.state }}</td>
-            <td contenteditable="true">{{ data.pin_code }}</td>
-            <td contenteditable="true">{{ data.mobile1 }}</td>
-            <td contenteditable="true">{{ data.mobile2 }}</td>
-            <td contenteditable="true">{{ data.aadhar_card }}</td>
-            <td contenteditable="true">{{ data.pan_card }}</td>
-
-          </tr>
-          {% endfor %}
-
-
-
-        </tbody>
-    </table>
+  <div id="dataTable" class="display nowrap" style="width:100%" >
+           
+  
+  </div>
 
 
   </div>
 
  </center>
+
+ <script>
+  var data = JSON.parse("{{dataJSON|escapejs}}")
+ </script>
+ 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
- <script src="{% static 'datatables/1.10.22/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'datatables/1.10.22/js/jquery.dataTables.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/edit_donor_details.js' %}"></script>
 {% endblock %}

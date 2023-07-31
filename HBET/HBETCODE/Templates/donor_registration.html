@@ -6,6 +6,7 @@
   <title>Menu Example</title>
   <style>
     body {
+      background: url('');
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
       margin: 0;
@@ -13,7 +14,7 @@
     }
 
     .header {
-      background-color: #333;
+      background-color: #0322d3;
       color: #fff;
       display: flex;
       justify-content: space-between;
@@ -28,10 +29,14 @@
       color: #fff;
       text-decoration: none;
       margin: 0 10px;
+      margin-top: 5px;
+    }
+    .menu a:hover{
+      background-color: #fd0404;
     }
 
     .profile-button {
-      background-color: #4CAF50;
+      background-color: #fd0404;
       color: #fff;
       border: none;
       padding: 10px;
@@ -64,11 +69,12 @@
     }
 
     .form-group input[type="submit"] {
-        background-color: #4CAF50;
+        background-color: #0322d3;
         color: white;
         cursor: pointer;
         width: 20%;
     }
+    
   </style>
 </head>
 <body>
@@ -77,7 +83,8 @@
     <div class="menu">
       <a href="/donorregistration">Donor Registration Form</a>
       <a href = "/donordetails">Donor Details</a>
-      <a href="#">Add Donation</a>
+      <a href="/add_donation">Add Donation</a>
+      <a href="/view_donation">View Donation </a>
     </div>
     <button class="profile-button">Profile</button>
   </div>
@@ -90,7 +97,7 @@
         <div class="form-container">
           {% for message in messages %}
 
-            <div class="alert alert-success" id="alertmessage">
+          <div class="animate__animated animate__bounceInUp" id="" style="color:#fff; background-color: #0322d3; width:25%; margin-top:4px; margin-left:290px; border-radius:30px; text-align:center; padding:10px; >
                 <a class="close" href="#" data-dismiss="alert"></a>
                    {{ message }}
             </div>

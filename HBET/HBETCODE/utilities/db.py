@@ -5,8 +5,9 @@ def get_db_connection():
         conn = pymysql.connect(
             db = 'Hbet',
             user = 'root',
-            password = '@Vvp150470',
+            password = 'root',
             host = '127.0.0.1',
+            port=8800,
             connect_timeout=500
         )
     except pymysql.MySQLError as e:

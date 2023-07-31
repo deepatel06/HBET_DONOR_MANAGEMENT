@@ -6,147 +6,97 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Menu Example</title>
   <style>
-
-
-
-
-#dataTable td {
-  text-align: center;
-}
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-
-    .header {
-      background-color: #0322d3;
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-    }
-
-    .menu {
-      display: flex;
-    }
-
-    .menu a {
-      color: #fff;
-      text-decoration: none;
-      margin: 0 10px;
-    }
-    .menu a:hover{
+    #dataTable td {
+        text-align: center;
+      }
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+          }
+      
+          .header {
+            background-color: #0322d3;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+          }
+      
+          .menu {
+            display: flex;
+          }
+      
+          .menu a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+          }
+          .menu a:hover{
       background-color: #fd0404;
-    }
+          }
+      
+          .profile-button {
+            background-color: #fd0404;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+          }
 
-    .profile-button {
-      background-color: #fd0404;
-      color: #fff;
-      border: none;
-      padding: 10px;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-     .form-container {
-        display: flex;
-    }
-
-    .form-column {
-        flex: 1;
-        padding: 10px;
-    }
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        font-weight: bold;
-    }
-
-    .form-group input,
-    .form-group select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    .form-group input[type="submit"] {
-        background-color: #4CAF50;
-        color: white;
-        cursor: pointer;
-        width: 20%;
-    }
-  </style>
-  <link rel="stylesheet" type="text/css" href ="{% static 'datatables/1.10.22/css/jquery.dataTables.min.css' %}">
-</head>
-<body>
-{%block content%}
+        </style>
+        <link rel="stylesheet" type="text/css" href ="{% static 'datatables/1.10.22/css/jquery.dataTables.min.css' %}">
+      </head>
+      {%block content%}
   <div class="header">
     <div class="menu">
       <a href="/donorregistration">Donor Registration Form</a>
       <a href = "/donordetails">Donor Details</a>
       <a href="/add_donation">Add Donation</a>
       <a href="/view_donation">View Donation </a>
-
     </div>
     <button class="profile-button">Profile</button>
   </div>
 
+  <button id="exportBtn" style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button" onclick="exportToExcel()">Export to CSV</button>
 
-<button id="exportBtn" style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button" onclick="exportToExcel()">Export to CSV</button>
-<button style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button" onclick ="redirect()">Edit</button>
 
    <div id="content">
 
   <table id="dataTable" class="display nowrap" style="width:100%">
         <thead>
             <tr>
+                <th>Donation ID</th>
                 <th>First name</th>
-                <th>Last name</th>
-                <th>Full Name</th>
+                <th>Last Name</th>
                 <th>Email</th>
-                <th>Date Of Birth</th>
-                <th>Date Of Marriage</th>
-                <th>Spouse Name</th>
-                <th>Address 1</th>
-                <th>Address 2</th>
-                <th>Date Of Registration</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Pincode</th>
-                <th>Mobile Number 1</th>
-                <th>Mobile Number 2</th>
-                <th>Aadhar Card Number</th>
-                <th>Pan Card Number</th>
-
+                <th>Contact No</th>
+                <th>Type Of Donation</th>
+                <th>Amount</th>
+                <th>Types of Payment</th>
+                <th>Date Of Donation</th>
+                <th>Pan No</th>
+                <th>Remarks</th>
+               
             </tr>
         </thead>
         <tbody>
 
             {% for data in rows %}
           <tr>
+            <td>{{ data.donation_id }}</td>
             <td>{{ data.first_name }}</td>
             <td>{{ data.last_name }}</td>
-            <td>{{ data.full_name }}</td>
             <td>{{ data.email }}</td>
-            <td>{{ data.dob }}</td>
-            <td>{{ data.dom }}</td>
-            <td>{{ data.spouse_name }}</td>
-            <td>{{ data.address1 }}</td>
-            <td>{{ data.address2 }}</td>
-            <td>{{ data.dor }}</td>
-            <td>{{ data.city }}</td>
-            <td>{{ data.state }}</td>
-            <td>{{ data.pin_code }}</td>
-            <td>{{ data.mobile1 }}</td>
-            <td>{{ data.mobile2 }}</td>
-            <td>{{ data.aadhar_card }}</td>
-            <td>{{ data.pan_card }}</td>
-
+            <td>{{ data.contact_no }}</td>
+            <td>{{ data.type_of_donation }}</td>
+            <td>{{ data.amount }}</td>
+            <td>{{ data.type_of_payment }}</td>
+            <td>{{ data.date_of_donation }}</td>
+            <td>{{ data.pan_no }}</td>
+            <td>{{ data.remarks }}</td>
           </tr>
           {% endfor %}
 
@@ -156,9 +106,9 @@
     </table>
 
 
-  </div>
+</div>
 
- </center>
+</center>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
  <script src="{% static 'datatables/1.10.22/js/jquery.dataTables.min.js' %}"></script>
 
@@ -254,3 +204,4 @@ window.location.href = "/editdonordetails";
 {% endblock %}
 </body>
 </html>
+
