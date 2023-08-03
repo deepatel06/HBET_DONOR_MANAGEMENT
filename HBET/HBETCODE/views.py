@@ -9,22 +9,36 @@ from django.http import JsonResponse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 from HBETCODE import models
 from HBETCODE.utilities.db import get_db_connection
 
 
 # Create your views here.
-def adminlogin(request):
 
+def my_login_required(view_func):
+    def _wrapped_view(request, *args, **kwargs):
+       
+        if "user_email" in request.session :
+            
+            return view_func(request, *args, **kwargs)
+        else:
+            
+            return HttpResponseRedirect('/')  # Redirect to login page if not authenticated
+    return _wrapped_view
+
+def adminlogin(request):
     return render(request, "admin_login.html")
 
 def admin_authentication(request):
     if request.method == 'POST':
-        username = request.POST['username']
+        useremail = request.POST['username']
         password = request.POST['password']
 
-        if models.admin_details.objects.filter(email=username).exists() and models.admin_details.objects.filter(password=password).exists():
+        if models.admin_details.objects.filter(email=useremail).exists() and models.admin_details.objects.filter(password=password).exists():
+            request.session['user_email'] = useremail
             return HttpResponseRedirect('/donorregistration')
 
 
@@ -36,8 +50,9 @@ def admin_authentication(request):
 def Home(request):
     return render(request, "home.html")
 
+@my_login_required
 def donor_registration(request):
-
+    
     return render(request, "donor_registration.html")
 
 def insert_donor_details(request):
@@ -68,7 +83,7 @@ def insert_donor_details(request):
 
         messages.success(request, 'Donor Registered successfully.')
         return HttpResponseRedirect('/donorregistration')
-
+@my_login_required
 def donor_details(request):
 
     donor_data = models.DonorDetails.objects.all()
@@ -79,10 +94,9 @@ class DateEncoder(json.JSONEncoder):
         if isinstance(obj, date):
             return obj.isoformat()
         return super().default(obj)
+@my_login_required    
 def edit_donor_details(request):
 
-    #donor_data = models.DonorDetails.objects.all()
-    #donor_data_forjs = list(donor_data.values())
     cur, conn = for_open_db_connection()
 
     query = f"SELECT * FROM hbet.donor_details;"
@@ -119,10 +133,7 @@ def update_donor_details_db(request):
             pan_card = f_data[i]['Pan Card Number']
             email = f_data[i]['Email']
             password = f_data[i]['Password']
-            print(first_name, last_name,spouse_name, address1, address2,city,dob,dom,dor,
-                  state, pin_code, mobile2,
-                  mobile1, aadhar_card, pan_card,password,email,"in updateee")
-
+            
             cur, conn = for_open_db_connection()
             query = f"update hbet.donor_details set first_name = '{first_name}', last_name = '{last_name}',full_name ='{full_name}', spouse_name = '{spouse_name}',address1 = '{address1}',address2 = '{address2}',city = '{city}',state = '{state}', pin_code = '{pin_code}',mobile2 ='{mobile2}',mobile1 = '{mobile1}',aadhar_card = {aadhar_card}, pan_card='{pan_card}',email = '{email}',dob ='{dob}',dom ='{dom}',dor ='{dor}'  where id = {id+1}; "
             print(query)
@@ -134,6 +145,7 @@ def update_donor_details_db(request):
 
     return JsonResponse({'status': 'success'})
 
+@my_login_required
 def add_donation(request):
 
     return render(request, "add_donation.html")
@@ -160,7 +172,7 @@ def insert_donation(request):
 
         messages.success(request, 'Donation added successfully.')
         return HttpResponseRedirect('/add_donation')
-
+@my_login_required
 def viewDonation(request):
     donation_data = models.Donation.objects.all()
     return render(request, "view_donation.html", {'rows': donation_data})
@@ -175,3 +187,12 @@ def for_open_db_connection():
             print(error)
 
         return cur,conn 
+def logout_view(request):
+    # Clear the user's session data
+    del request.session['user_email']
+        # Log the user out using Django's built-in logout function
+    
+    
+    # Redirect the user to a specific page (optional)
+    return HttpResponseRedirect('/')
+    
