@@ -12,6 +12,7 @@ urlpatterns = {
     path('admin_authentication', views.admin_authentication, name='admin_authentication'),
     path('add_donation', views.add_donation, name='add_donation'),
     path('insert_donation', views.insert_donation, name='insert_donation'),
-     path('view_donation', views.viewDonation, name='view_donation')
+    path('view_donation', views.viewDonation, name='view_donation'),
+    path('logout', views.logout_view, name='logout')
 
 }
