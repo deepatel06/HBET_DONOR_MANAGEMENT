@@ -36,7 +36,7 @@ def admin_authentication(request):
     if request.method == 'POST':
         useremail = request.POST['username']
         password = request.POST['password']
-        print(useremail,password)
+        
         if models.admin_details.objects.filter(email=useremail).exists() and models.admin_details.objects.filter(password=password).exists():
             request.session['user_email'] = useremail
             admin_data = models.admin_details.objects.filter(email=useremail).values()
@@ -57,7 +57,7 @@ def Home(request):
 @my_login_required
 def donor_registration(request):
     session_username = request.session['user_name']
-    print(session_username,"drrr")
+    
     return render(request, "donor_registration.html",{'username': session_username})
 
 def insert_donor_details(request):
