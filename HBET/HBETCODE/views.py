@@ -36,9 +36,13 @@ def admin_authentication(request):
     if request.method == 'POST':
         useremail = request.POST['username']
         password = request.POST['password']
-
+        
         if models.admin_details.objects.filter(email=useremail).exists() and models.admin_details.objects.filter(password=password).exists():
             request.session['user_email'] = useremail
+            admin_data = models.admin_details.objects.filter(email=useremail).values()
+            for user in admin_data:
+                request.session['user_name'] = user['full_name']
+                print(user['full_name'])
             return HttpResponseRedirect('/donorregistration')
 
 
@@ -52,8 +56,9 @@ def Home(request):
 
 @my_login_required
 def donor_registration(request):
+    session_username = request.session['user_name']
     
-    return render(request, "donor_registration.html")
+    return render(request, "donor_registration.html",{'username': session_username})
 
 def insert_donor_details(request):
     if request.method == 'POST':
@@ -85,9 +90,9 @@ def insert_donor_details(request):
         return HttpResponseRedirect('/donorregistration')
 @my_login_required
 def donor_details(request):
-
+    session_username = request.session['user_name']
     donor_data = models.DonorDetails.objects.all()
-    return render(request, "donor_details.html", {'rows': donor_data})
+    return render(request, "donor_details.html", {'rows': donor_data, 'username': session_username}) 
 
 class DateEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -115,15 +120,15 @@ def update_donor_details_db(request):
 
         for i in range(len(f_data)):
             id = int(f_data[i]['ID'])-1   #because we get start id in db from 1 and in list we get start id from 0
-            first_name= f_data[i]['First name']
-            last_name = f_data[i]['Last name']
+            first_name= f_data[i]['First Name']
+            last_name = f_data[i]['Last Name']
             full_name = f_data[i]['Full Name']
-            dob = datetime.strptime(f_data[i]['Date Of Birth'], '%B %d, %Y').date()
-            dom = 'NA' if f_data[i]['Date Of Marriage'] == '' or 'None' else datetime.strptime(f_data[i]['Date Of Marriage'], '%B %d, %Y').date()
+            dob = f_data[i]['Date Of Birth(YYYY-MM-DD)']
+            dom = f_data[i]['Date Of Marriage']
             spouse_name = f_data[i]['Spouse Name']
             address1 = f_data[i]['Address 1']
             address2 = f_data[i]['Address 2']
-            dor = (f_data[i]['Date Of Registration'])
+            dor = f_data[i]['Date Of Registration']
             city = f_data[i]['City']
             state = f_data[i]['State']
             pin_code = f_data[i]['Pincode']
@@ -147,8 +152,8 @@ def update_donor_details_db(request):
 
 @my_login_required
 def add_donation(request):
-
-    return render(request, "add_donation.html")
+    session_username = request.session['user_name']
+    return render(request, "add_donation.html",{'username': session_username})
 
 def insert_donation(request):
     if request.method == 'POST':
@@ -175,7 +180,8 @@ def insert_donation(request):
 @my_login_required
 def viewDonation(request):
     donation_data = models.Donation.objects.all()
-    return render(request, "view_donation.html", {'rows': donation_data})
+    session_username = request.session['user_name']
+    return render(request, "view_donation.html", {'rows': donation_data,'username': session_username})
 
 def for_open_db_connection():
 

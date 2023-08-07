@@ -30,6 +30,7 @@
       text-decoration: none;
       margin: 0 10px;
       margin-top: 5px;
+      inline-size: 230pxs;
     }
     .menu a:hover{
       background-color: #fd0404;
@@ -74,8 +75,52 @@
         cursor: pointer;
         width: 20%;
     }
-    
-  </style>
+            /* Style for the profile icon */
+            .profile-icon {
+            width: 38px;
+            height: 40px;
+            background-color: #ee1111e3;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-left: 20px;
+            margin-top: 4px;
+        }
+
+        .profile-icon img{
+            height: 35px;
+            width: 35px;
+        }
+        
+
+        /* Style for the profile card */
+        .profile-card {
+            display: none;
+            position: absolute;
+            top: 80px;
+            right: 10px;
+            width: 150px;
+            background-color: #063da1;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style for the card text and button */
+        .profile-name {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .logout-button {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+  
 </head>
 <body>
 {%block content%}
@@ -86,7 +131,16 @@
       <a href="/add_donation">Add Donation</a>
       <a href="/view_donation">View Donation </a>
     </div>
-    <a href="logout" style="color: #fff;background-color: #fd0404; height: 25px; width: 60px;text-align: center;">Logout </a>
+        <!-- Profile Icon -->
+        <div class="profile-icon" onclick="toggleProfileCard()">
+          <img src="https://cdn3.iconfinder.com/data/icons/leto-user-group/64/__user_person_profile-64.png" alt="">
+      </div>
+  
+      <!-- Profile Card -->
+      <div class="profile-card" id="profileCard">
+          <div class="profile-name">{{username}}</div>
+          <button class="logout-button" onclick="logout()">Logout</button>
+      </div>
   </div>
 
   <div id="content">
@@ -97,7 +151,7 @@
         <div class="form-container">
           {% for message in messages %}
 
-          <div class="animate__animated animate__bounceInUp" id="" style="color:#fff; background-color: #0322d3; width:25%; margin-top:4px; margin-left:290px; border-radius:30px; text-align:center; padding:10px; >
+          <div class="animate__animated animate__bounceInUp" id="" style="color:#fff; background-color: #0322d3; width:25%; margin-top:4px; margin-left:290px; border-radius:30px; text-align:center; padding:10px;" >
                 <a class="close" href="#" data-dismiss="alert"></a>
                    {{ message }}
             </div>
@@ -219,6 +273,25 @@
         event.preventDefault(); // Prevent form submission
       }
     });
+        // Function to toggle the profile card visibility
+        function toggleProfileCard() {
+            var profileCard = document.getElementById("profileCard");
+            if (profileCard.style.display === "block") {
+                profileCard.style.display = "none";
+            } else {
+                profileCard.style.display = "block";
+            }
+        }
+
+        // Function to handle logout action (implement your logout logic here)
+        function logout() {
+          
+            // For this example, we'll just hide the profile card
+            var profileCard = document.getElementById("profileCard");
+            profileCard.style.display = "none";
+            window.location.href = "/logout";
+        }
+
 
   </script>
 {% endblock %}
