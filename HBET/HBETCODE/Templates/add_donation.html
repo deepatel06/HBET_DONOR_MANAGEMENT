@@ -1,274 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
   <title>Add Donation</title>
   <style>
     body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-        }
-  
-      .header {
-        background-color: #0322d3;
-        color: #fff;
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-      }
-  
-      .menu {
-        display: flex;
-      }
-  
-      .menu a {
-        color: #fff;
-        text-decoration: none;
-        margin: 0 10px;
-        inline-size: 230pxs;
-      }
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+    }
 
-      .menu a:hover{
+    .header {
+      background-color: #0322d3;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    .menu {
+      display: flex;
+    }
+
+    .menu a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 10px;
+      inline-size: 230pxs;
+    }
+
+    .menu a:hover {
       background-color: #fd0404;
     }
-  
-      .profile-button {
-        background-color: #fd0404;
-        color: #fff;
-        border: none;
-        padding: 10px;
-        border-radius: 3px;
-        cursor: pointer;
-      }
-   
+
+    .profile-button {
+      background-color: #fd0404;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
     form {
-        max-width: 400px;
-        margin: 0 auto;
-        margin-right: 80px;
-        margin-top: 10px;
-        border: solid #cccccce5;
-        
-        
+      max-width: 400px;
+      height: 100%;
+      margin: 0 auto;
+      margin-right: 80px;
+      margin-top: 10px;
+      border-style: solid; color: #ccc;
+      border-radius: 5px;
+      background: #fcfcfc;
+      box-shadow:  8px 8px 16px #d1d1d1,
+             -8px -8px 16px #ffffff;
+
+
     }
 
     label {
-        margin-top: 7px;
-        display: block;
-        margin-bottom: 5px;
-        margin-left: 5px;
+      margin-top: 7px;
+      display: block;
+      margin-bottom: 5px;
+      margin-left: 5px;
+      color: black;
     }
 
     input[type="text"],
+    input[type="search"],
     input[type="email"],
     input[type="tel"],
     input[type="date"],
     select,
     textarea {
-        width: 90%;
-        padding: 8px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        margin-left: 5px;
+      width: 90%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-left: 5px;
     }
 
     input[type="submit"] {
-        padding: 10px;
-        background-color: #0322d3;
-        color: #fff;
-        border: none;
-        width: 95%;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-left: 10px;
+      padding: 10px;
+      background-color: #0322d3;
+      color: #fff;
+      border: none;
+      width: 95%;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+      margin-bottom: 5px;
     }
 
     input[type="submit"]:hover {
-        background-color: #3b1d8d;
+      background-color: #3b1d8d;
     }
-    
-    .art{
-        margin-top: -60%;
-        margin-left: 30px;
-       
-        height: 50%;
-        width: 40%;
-        }
-        .art image{
-            height: 50%;
-            width: 40%;
-        }
-        form h1{
-          text-align: center;
-      }
 
-              /* Style for the profile icon */
-              .profile-icon {
-            width: 38px;
-            height: 40px;
-            background-color: #ee1111e3;
-            border-radius: 50%;
-            cursor: pointer;
-            margin-left: 20px;
-        }
+    .art {
+      margin-top: -50%;
+      margin-left: 30px;
+      position: fixed;
+      height: 50%;
+      width: 40%;
+    }
 
-        .profile-icon img{
-            height: 35px;
-            width: 35px;
-        }
-        
+    .art image {
+      height: 50%;
+      width: 40%;
+    }
 
-        /* Style for the profile card */
-        .profile-card {
-            display: none;
-            position: absolute;
-            top: 80px;
-            right: 10px;
-            width: 150px;
-            background-color: #063da1;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    form h1 {
+      text-align: center;
+      color: black;
+    }
 
-        /* Style for the card text and button */
-        .profile-name {
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+    /* Style for the profile icon */
+    .profile-icon {
+      width: 38px;
+      height: 40px;
+      background-color: #ee1111e3;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-left: 20px;
+    }
 
-        .logout-button {
-            background-color: #dc3545;
-            color: #fff;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
+    .profile-icon img {
+      height: 35px;
+      width: 35px;
+    }
 
+
+    /* Style for the profile card */
+    .profile-card {
+      display: none;
+      position: absolute;
+      top: 80px;
+      right: 10px;
+      width: 150px;
+      background-color: #063da1;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style for the card text and button */
+    .profile-name {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .logout-button {
+      background-color: #dc3545;
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .searchbox{
       
+      position: absolute;
+      margin-left: -350px;
+      margin-top: -81px;
+      width: 20%;
+      border-style: solid; color: #ccc;
+      border-radius: 5px;
+      background: #fcfcfc;
+      box-shadow:  8px 8px 16px #d1d1d1,
+             -8px -8px 16px #ffffff;
+      
+    }
 
-</style>
+  </style>
 
 </head>
 
-<body> 
-    
+<body>
+
   <div class="header">
     <div class="menu">
       <a href="/donorregistration">Donor Registration Form</a>
-      <a href = "/donordetails">Donor Details</a>
+      <a href="/donordetails">Donor Details</a>
       <a href="/add_donation">Add Donation</a>
       <a href="/view_donation">View Donation </a>
     </div>
-      <!-- Profile Icon -->
-      <div class="profile-icon" onclick="toggleProfileCard()">
-        <img src="https://cdn3.iconfinder.com/data/icons/leto-user-group/64/__user_person_profile-64.png" alt="">
+    <!-- Profile Icon -->
+    <div class="profile-icon" onclick="toggleProfileCard()">
+      <img src="https://cdn3.iconfinder.com/data/icons/leto-user-group/64/__user_person_profile-64.png" alt="">
     </div>
 
     <!-- Profile Card -->
     <div class="profile-card" id="profileCard">
-        <div class="profile-name">{{username}}</div>
-        <button class="logout-button" onclick="logout()">Logout</button>
+      <div class="profile-name">{{username}}</div>
+      <button class="logout-button" onclick="logout()">Logout</button>
     </div>
   </div>
 
 
 
-<div class="form-container">
-  {% for message in messages %}
+  <div class="form-container">
+    {% for message in messages %}
 
     <div class="animate__animated animate__bounceInUp" id="" style="color:#fff; background-color: #0322d3; width:25%; margin-top:4px; margin-left:290px; border-radius:30px; text-align:center; padding:10px; >
-        <a class="close" href="#" data-dismiss="alert"></a>
-           {{ message }}
+        <a class=" close" href="#" data-dismiss="alert"></a>
+      {{ message }}
     </div>
-  {% endfor %}
-<form action="/insert_donation" method="post">
-  {% csrf_token %}
-    <h1> Donation Form </h1>
-    <label for="donation_type">Type of Donation:</label>
-    <select id="donation_type" name="donation_type" required>
+    {% endfor %}
+    <form action="/insert_donation" method="post">
+      {% csrf_token %}
+      <h1> Donation Form </h1>
+
+      <div class="searchbox">
+        <h3 style="color: black; text-align: center;">Search Existing Donor</h3>
+      <label for="search">Search Donor:</label>
+      <input type="search" id="search" oninput="handleSearch(event)" placeholder="Search for a Donor">
+      <br>
+      <label for="userSelect">Select Donor:</label>
+      <select id="userSelect" onchange="handleSelectChange(event)">
+        <option  value="" disabled selected>Select a user</option>
+      </select>
+      </div>
+      <label for="donation_type">Type of Donation:</label>
+      <select id="donation_type" name="donation_type" required>
         <option value="">-- Select Donation Type --</option>
         <option value="money">Money</option>
         <option value="clothes">Clothes</option>
         <option value="food">Food</option>
         <option value="Other">Other</option>
         <!-- Add more options as needed -->
-    </select>
-    
-        <label for="firstname">First Name:</label>
-        <input type="text" id="firstname" name="firstname" required>
+      </select>
+      <label for="firstname">Full Name:</label>
+      <input type="text" id="firstname" name="firstname" required>
 
-        <label for="lastname">Last Name:</label>
-        <input type="text" id="lastname" name="lastname" required>
+      <label for="phone">Contact No:</label>
+      <input type="tel" id="phone" name="phone" required>
 
-        
+      <label for="payment_type">Type of Payment:</label>
+      <select id="payment_type" name="payment_type" required>
+        <option value="">-- Select Payment Type --</option>
+        <option value="Cash">Cash</option>
+        <option value="Cheque">Cheque</option>
+        <option value="UPI">UPI</option>
+        <option value="NetBanking">Net Banking</option>
+        <!-- Add more options as needed -->
+      </select>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+      <label for="amount">Amount in Rupees:</label>
+      <input type="number" id="amount" name="amount" required
+        style="width: 93% ; border: 1px solid #ccc; border-radius: 5px; height: 30px; margin-left: 3px;">
 
-        <label for="phone">Contact No:</label>
-        <input type="tel" id="phone" name="phone" required>
+      <label for="dod">Date of Donation:</label>
+      <input type="date" id="dod" name="dod" value="">
 
-        <label for="payment_type">Type of Payment:</label>
-        <select id="payment_type" name="payment_type" required>
-            <option value="">-- Select Payment Type  --</option>
-            <option value="Cash">Cash</option>
-            <option value="Cheque">Cheque</option>
-            <option value="UPI">UPI</option>
-            <option value="NetBanking">Net Banking</option>
-            <!-- Add more options as needed -->
-        </select>
 
-        <label for="amount">Amount in Rupees:</label>
-        <input type="number" id="amount" name="amount" required style="width: 93% ; border: 1px solid #ccc; border-radius: 5px; height: 30px; margin-left: 3px;">
 
-        <label for="dod">Date of Donation:</label>
-            <input type="date" id="dod" name="dod" value="">
 
-        
 
-        <label for="pan">PAN Number:</label>
-        <input type="text" id="pan" name="pan" required>
+      <label for="Remarks">Remarks:</label>
+      <textarea id="Remarks" name="Remarks" rows="4"></textarea>
 
-        <label for="Remarks">Remarks:</label>
-        <textarea id="Remarks" name="Remarks" rows="4"></textarea>
-    
 
-    <input type="submit" value="Submit">
-</form>
-<div class="art">
-<img src="https://cdni.iconscout.com/illustration/premium/thumb/charity-and-donation-3142069-2621398.png" alt="">
+      <input type="submit" value="Submit">
+    </form>
+    <div class="art">
+      <img src="https://cdni.iconscout.com/illustration/premium/thumb/charity-and-donation-3142069-2621398.png" alt="">
 
-</div>
-<script>
-          // Function to toggle the profile card visibility
-          function toggleProfileCard() {
-            var profileCard = document.getElementById("profileCard");
-            if (profileCard.style.display === "block") {
-                profileCard.style.display = "none";
-            } else {
-                profileCard.style.display = "block";
-            }
+    </div>
+
+    <script>
+       var data = JSON.parse("{{donor_dict|escapejs}}")
+       console.log(data)
+      // Function to toggle the profile card visibility
+      function toggleProfileCard() {
+        var profileCard = document.getElementById("profileCard");
+        if (profileCard.style.display === "block") {
+          profileCard.style.display = "none";
+        } else {
+          profileCard.style.display = "block";
         }
+      }
 
-        // Function to handle logout action (implement your logout logic here)
-        function logout() {
-          
-            // For this example, we'll just hide the profile card
-            var profileCard = document.getElementById("profileCard");
-            profileCard.style.display = "none";
-            window.location.href = "/logout";
-        }
-</script>
+      // Function to handle logout action (implement your logout logic here)
+      function logout() {
+
+        // For this example, we'll just hide the profile card
+        var profileCard = document.getElementById("profileCard");
+        profileCard.style.display = "none";
+        window.location.href = "/logout";
+      }
+
+      function handleSearch(event) {
+    const searchTerm = event.target.value;
+    const selectElement = document.getElementById("userSelect");
+    selectElement.innerHTML = "";
+
+    for (const name in data) {
+      if (name.toLowerCase().includes(searchTerm.toLowerCase())) {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        selectElement.appendChild(option);
+      }
+    }
+  }
+
+  function handleSelectChange(event) {
+    const selectedName = event.target.value;
+    const user = data[selectedName];
+    document.getElementById("phone").value = user.contact_no;
+    document.getElementById("firstname").value = user.name;
+
+  }
+
+    
+
+    </script>
 </body>
 
 </html>

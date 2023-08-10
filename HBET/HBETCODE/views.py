@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+import pandas as pd
 
 from HBETCODE import models
 from HBETCODE.utilities.db import get_db_connection
@@ -141,7 +142,7 @@ def update_donor_details_db(request):
             
             cur, conn = for_open_db_connection()
             query = f"update hbet.donor_details set first_name = '{first_name}', last_name = '{last_name}',full_name ='{full_name}', spouse_name = '{spouse_name}',address1 = '{address1}',address2 = '{address2}',city = '{city}',state = '{state}', pin_code = '{pin_code}',mobile2 ='{mobile2}',mobile1 = '{mobile1}',aadhar_card = {aadhar_card}, pan_card='{pan_card}',email = '{email}',dob ='{dob}',dom ='{dom}',dor ='{dor}'  where id = {id+1}; "
-            print(query)
+            
             cur.execute(query)
             conn.commit()
             conn.close()
@@ -153,21 +154,46 @@ def update_donor_details_db(request):
 @my_login_required
 def add_donation(request):
     session_username = request.session['user_name']
-    return render(request, "add_donation.html",{'username': session_username})
+    sql = f"""select distinct full_name,mobile1 from donor_details;"""
+    cur, conn = for_open_db_connection()
+    df_cu = pd.read_sql(sql, conn)
+    
+    donor_name_dict = {}
+    for _, row in df_cu.iterrows():
+        donor_name_dict[row["full_name"]] = {}
+        donor_name_dict[row["full_name"]]["contact_no"] = row["mobile1"]
+        donor_name_dict[row["full_name"]]["name"] = row["full_name"]
+    
+    dataJSON = dumps(donor_name_dict)
+  
+    return render(request, "add_donation.html",{'username': session_username,'donor_dict':dataJSON})
 
 def insert_donation(request):
     if request.method == 'POST':
         donation_type = request.POST['donation_type']
-        first_name = request.POST['firstname']
-        last_name = request.POST['lastname']
+        full_name = request.POST['firstname']
+        
         contactno = request.POST['phone']
         typeofpayment = request.POST['payment_type']
         amount = request.POST['amount']
         dateofdonation = request.POST['dod']
         
-        pan_no = request.POST['pan']
-        email = request.POST['email']
         remarks  = request.POST['Remarks']
+      
+        cur, conn = for_open_db_connection()
+        query = f"SELECT first_name,last_name,email,pan_card FROM hbet.donor_details where full_name = '{full_name}' and mobile1= {contactno};"
+        
+        cur.execute(query)
+        donor_data = cur.fetchall()
+        conn.commit()
+        conn.close()
+        
+        first_name = donor_data[0]["first_name"]
+        last_name = donor_data[0]["last_name"]
+        email = donor_data[0]["email"]
+        pan_no = donor_data[0]["pan_card"]
+        
+
         print(donation_type, first_name, last_name, contactno, typeofpayment, amount, dateofdonation, pan_no, email,remarks)
 
         donation = models.Donation(first_name=first_name, last_name=last_name, type_of_donation=donation_type,
