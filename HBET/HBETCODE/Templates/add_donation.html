@@ -21,6 +21,7 @@
       display: flex;
       justify-content: space-between;
       padding: 10px;
+      s
     }
 
     .menu {
@@ -53,6 +54,7 @@
       margin: 0 auto;
       margin-right: 80px;
       margin-top: 10px;
+      padding: 10px;
       border-style: solid; color: #ccc;
       border-radius: 5px;
       background: #fcfcfc;
@@ -103,7 +105,7 @@
 
     .art {
       margin-top: -50%;
-      margin-left: 30px;
+      margin-left: 5px;
       position: fixed;
       height: 50%;
       width: 40%;
@@ -168,6 +170,7 @@
       position: absolute;
       margin-left: -350px;
       margin-top: -81px;
+      padding: 10px;
       width: 20%;
       border-style: solid; color: #ccc;
       border-radius: 5px;
@@ -226,6 +229,13 @@
         <option  value="" disabled selected>Select a user</option>
       </select>
       </div>
+
+      <label for="firstname">Full Name:</label>
+      <input type="text" id="firstname" name="firstname" required>
+
+      <label for="phone">Contact No:</label>
+      <input type="tel" id="phone" name="phone" required>
+
       <label for="donation_type">Type of Donation:</label>
       <select id="donation_type" name="donation_type" required>
         <option value="">-- Select Donation Type --</option>
@@ -235,11 +245,6 @@
         <option value="Other">Other</option>
         <!-- Add more options as needed -->
       </select>
-      <label for="firstname">Full Name:</label>
-      <input type="text" id="firstname" name="firstname" required>
-
-      <label for="phone">Contact No:</label>
-      <input type="tel" id="phone" name="phone" required>
 
       <label for="payment_type">Type of Payment:</label>
       <select id="payment_type" name="payment_type" required>
