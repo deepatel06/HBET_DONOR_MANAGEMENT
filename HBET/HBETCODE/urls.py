@@ -13,6 +13,7 @@ urlpatterns = {
     path('add_donation', views.add_donation, name='add_donation'),
     path('insert_donation', views.insert_donation, name='insert_donation'),
     path('view_donation', views.viewDonation, name='view_donation'),
-    path('logout', views.logout_view, name='logout')
-
+    path('logout', views.logout_view, name='logout'),
+    path('forget_password', views.forget_password, name='forget_password'),
+    path('reset_password', views.reset_password, name='reset_password')
 }

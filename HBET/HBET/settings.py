@@ -77,6 +77,18 @@ DATABASES = {
     }
 }
 
+# settings.py
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  # Use the appropriate port for your SMTP server
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'deep@aivantage.org'
+EMAIL_HOST_PASSWORD = 'mmxmbdyyeazffslr'
+DEFAULT_FROM_EMAIL = 'deep@aivantage.org'
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -111,6 +123,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 3600 
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
