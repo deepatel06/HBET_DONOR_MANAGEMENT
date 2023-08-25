@@ -43,6 +43,10 @@ class Donation(models.Model):
     pan_no = models.CharField(max_length=45)
     remarks = models.CharField(max_length=45, blank=True, null=True)
     donation_id = models.AutoField(primary_key=True)
+    cheque_no = models.CharField(max_length=45,blank = True, null = True)
+    bank_name =models.CharField(max_length=45, blank = True, null = True)
+    transaction_id =models.CharField(max_length=45, blank = True, null = True)
+    
 
     class Meta:
         

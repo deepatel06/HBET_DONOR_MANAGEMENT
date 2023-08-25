@@ -55,11 +55,12 @@
       margin-right: 80px;
       margin-top: 10px;
       padding: 10px;
-      border-style: solid; color: #ccc;
+      border-style: solid;
+      color: #ccc;
       border-radius: 5px;
       background: #fcfcfc;
-      box-shadow:  8px 8px 16px #d1d1d1,
-             -8px -8px 16px #ffffff;
+      box-shadow: 8px 8px 16px #d1d1d1,
+        -8px -8px 16px #ffffff;
 
 
     }
@@ -106,7 +107,7 @@
     .art {
       margin-top: -50%;
       margin-left: 5px;
-      position: fixed;
+      
       height: 50%;
       width: 40%;
     }
@@ -140,6 +141,7 @@
     /* Style for the profile card */
     .profile-card {
       display: none;
+      flex-direction: column;
       position: absolute;
       top: 80px;
       right: 10px;
@@ -163,23 +165,26 @@
       border: none;
       border-radius: 3px;
       cursor: pointer;
+      margin-bottom: 15px;
     }
 
-    .searchbox{
-      
+    .searchbox {
+
       position: absolute;
       margin-left: -350px;
       margin-top: -81px;
       padding: 10px;
       width: 20%;
-      border-style: solid; color: #ccc;
+      border-style: solid;
+      color: #ccc;
       border-radius: 5px;
       background: #fcfcfc;
-      box-shadow:  8px 8px 16px #d1d1d1,
-             -8px -8px 16px #ffffff;
-      
+      box-shadow: 8px 8px 16px #d1d1d1,
+        -8px -8px 16px #ffffff;
+
     }
 
+  
   </style>
 
 </head>
@@ -202,6 +207,9 @@
     <div class="profile-card" id="profileCard">
       <div class="profile-name">{{username}}</div>
       <button class="logout-button" onclick="logout()">Logout</button>
+      <br>
+      <a style="color: #fff;text-decoration: none;background-color: #dc3545; border-radius: 3px; text-align: center; margin-top: 2px;padding: 5px 10px;cursor: pointer;" href="reset_password">Reset Password</a>
+    </div>
     </div>
   </div>
 
@@ -215,19 +223,19 @@
       {{ message }}
     </div>
     {% endfor %}
-    <form action="/insert_donation" method="post">
+    <form class="rf" action="/insert_donation" method="post">
       {% csrf_token %}
       <h1> Donation Form </h1>
 
       <div class="searchbox">
         <h3 style="color: black; text-align: center;">Search Existing Donor</h3>
-      <label for="search">Search Donor:</label>
-      <input type="search" id="search" oninput="handleSearch(event)" placeholder="Search for a Donor">
-      <br>
-      <label for="userSelect">Select Donor:</label>
-      <select id="userSelect" onchange="handleSelectChange(event)">
-        <option  value="" disabled selected>Select a user</option>
-      </select>
+        <label for="search">Search Donor:</label>
+        <input type="search" id="search" oninput="handleSearch(event)" placeholder="Search for a Donor">
+        <br>
+        <label for="userSelect">Select Donor:</label>
+        <select id="userSelect" onchange="handleSelectChange(event)">
+          <option value="" disabled selected>Select a user</option>
+        </select>
       </div>
       <label for="firstname">Full Name:</label>
       <input type="text" id="firstname" name="firstname" required>
@@ -238,22 +246,39 @@
       <label for="donation_type">Type of Donation:</label>
       <select id="donation_type" name="donation_type" required>
         <option value="">-- Select Donation Type --</option>
-        <option value="money">Money</option>
-        <option value="clothes">Clothes</option>
-        <option value="food">Food</option>
+        <option value="Books">Books</option>
+        <option value="Clothes">Clothes</option>
+        <option value="Food">Food</option>
         <option value="Other">Other</option>
         <!-- Add more options as needed -->
       </select>
 
+
       <label for="payment_type">Type of Payment:</label>
-      <select id="payment_type" name="payment_type" required>
-        <option value="">-- Select Payment Type --</option>
-        <option value="Cash">Cash</option>
-        <option value="Cheque">Cheque</option>
-        <option value="UPI">UPI</option>
-        <option value="NetBanking">Net Banking</option>
-        <!-- Add more options as needed -->
-      </select>
+<select id="payment_type" name="payment_type" required>
+  <option value="">-- Select Payment Type --</option>
+  <option value="Cash">Cash</option>
+  <option value="Cheque">Cheque</option>
+  <option value="UPI">UPI</option>
+  <option value="NetBanking">Net Banking</option>
+  <!-- Add more options as needed -->
+</select>
+
+<div id="cheque_fields" style="display: none;">
+  <label for="cheque_number">Cheque Number:</label>
+  <input type="text" id="cheque_number" name="cheque_number" style="width: 90%; margin-left: 5px;">
+  <label for="bank_name">Bank Name:</label>
+  <input type="text" id="bank_name" name="bank_name" style="width: 90%; margin-left: 5px;">
+  
+</div>
+
+<div id="transaction_fields" style="display: none;">
+  <label for="transaction_id">Transaction ID:</label>
+  <input type="text" id="transaction_id" name="transaction_id" style="width: 90%; margin-left: 5px;">
+</div>
+
+
+
 
       <label for="amount">Amount in Rupees:</label>
       <input type="number" id="amount" name="amount" required
@@ -278,8 +303,8 @@
     </div>
 
     <script>
-       var data = JSON.parse("{{donor_dict|escapejs}}")
-       console.log(data)
+      var data = JSON.parse("{{donor_dict|escapejs}}")
+      console.log(data)
       // Function to toggle the profile card visibility
       function toggleProfileCard() {
         var profileCard = document.getElementById("profileCard");
@@ -300,29 +325,49 @@
       }
 
       function handleSearch(event) {
-    const searchTerm = event.target.value;
-    const selectElement = document.getElementById("userSelect");
-    selectElement.innerHTML = "";
+        const searchTerm = event.target.value;
+        const selectElement = document.getElementById("userSelect");
+        selectElement.innerHTML = "";
 
-    for (const name in data) {
-      if (name.toLowerCase().includes(searchTerm.toLowerCase())) {
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        selectElement.appendChild(option);
+        for (const name in data) {
+          if (name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            const option = document.createElement("option");
+            option.value = name;
+            option.textContent = name;
+            selectElement.appendChild(option);
+          }
+        }
       }
-    }
+
+      function handleSelectChange(event) {
+        const selectedName = event.target.value;
+        const user = data[selectedName];
+        document.getElementById("phone").value = user.contact_no;
+        document.getElementById("firstname").value = user.name;
+
+      }
+
+      function handlePaymentTypeChange(event) {
+  const selectedPaymentType = event.target.value;
+  const chequeFields = document.getElementById("cheque_fields");
+  const transactionFields = document.getElementById("transaction_fields");
+
+  // Hide all fields initially
+  chequeFields.style.display = "none";
+  transactionFields.style.display = "none";
+
+  if (selectedPaymentType === "Cheque") {
+    chequeFields.style.display = "block";
+  } else if (selectedPaymentType === "UPI" || selectedPaymentType === "NetBanking") {
+    transactionFields.style.display = "block";
   }
+}
 
-  function handleSelectChange(event) {
-    const selectedName = event.target.value;
-    const user = data[selectedName];
-    document.getElementById("phone").value = user.contact_no;
-    document.getElementById("firstname").value = user.name;
+// Add an event listener to the payment type select element
+document.getElementById("payment_type").addEventListener("change", handlePaymentTypeChange);
 
-  }
 
-    
+
 
     </script>
 </body>

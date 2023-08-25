@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You for Your Donation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #3498db;
+        }
+        p {
+            margin: 20px 0;
+        }
+        .signature {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Thank You for Your Generous Donation!</h1>
+        <p>Dear, {{full_name}}</p>
+        <p>We are incredibly grateful for your donation to our cause.Your generous donation of <strong> INR {{amount}}</strong> warms our hearts and fuels our mission. Thank you for making a meaningful impact with your support..</p>
+        <p>Thank you once again for your generosity. Your contribution makes a significant difference. Please find attached pdf</p>
+        <p>Warm regards,</p>
+        <p class="signature">HARBANS BHALLA EDUCATION TRUST</p>
+    </div>
+</body>
+</html>

@@ -5,7 +5,7 @@ def get_db_connection():
         conn = pymysql.connect(
             db = 'Hbet',
             user = 'root',
-            password = 'root',
+            password = 'lorem',
             host = '127.0.0.1',
             port=8800,
             connect_timeout=500
