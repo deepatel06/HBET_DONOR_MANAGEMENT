@@ -183,6 +183,35 @@
         -8px -8px 16px #ffffff;
 
     }
+    .addnewdonationtype{
+      position: absolute;
+      margin-left: -350px;
+      margin-top: 170px;
+      padding: 10px;
+      width: 20%;
+      
+      border-style: solid;
+      color: #ccc;
+      border-radius: 5px;
+      background: #fcfcfc;
+      box-shadow: 8px 8px 16px #d1d1d1,
+        -8px -8px 16px #ffffff;
+      
+
+
+    }
+    .addnewdonationtype button{
+      background-color: #0322d3;
+      color: #fff;
+      border-radius: 5px;
+      width: 70%;
+      height: 30px;
+      align-items: center;
+      margin-left: 30px;
+    }
+    .addnewdonationtype button:hover{
+      background-color:#3b1d8d ;
+    }
 
   
   </style>
@@ -237,6 +266,12 @@
           <option value="" disabled selected>Select a user</option>
         </select>
       </div>
+      <div class="addnewdonationtype">
+      <label for="new_donation_type">New Donation Type:</label>
+      <input type="text" id="new_donation_type" placeholder="Enter a new donation type">
+      <button type="button" id="add_donation_type">Add</button>
+    </div>
+
       <label for="firstname">Full Name:</label>
       <input type="text" id="firstname" name="firstname" required>
 
@@ -366,7 +401,19 @@
 // Add an event listener to the payment type select element
 document.getElementById("payment_type").addEventListener("change", handlePaymentTypeChange);
 
+document.getElementById("add_donation_type").addEventListener("click", function() {
+    const newDonationType = document.getElementById("new_donation_type").value;
+    if (newDonationType.trim() !== "") {
+      const donationTypeDropdown = document.getElementById("donation_type");
+      const newOption = document.createElement("option");
+      newOption.value = newDonationType;
+      newOption.textContent = newDonationType;
+      donationTypeDropdown.appendChild(newOption);
+      document.getElementById("new_donation_type").value = ""; // Clear the input field
+    }
+  });
 
+  // ... the rest of your existing code ...
 
 
     </script>
