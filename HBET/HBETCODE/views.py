@@ -46,6 +46,57 @@ from HBETCODE.utilities.db import get_db_connection
 
 
 # Create your views here.
+def donation_operations(request):
+    active_user = request.session['user_name']
+    
+    cur, conn = for_open_db_connection()
+
+    query= f"SELECT donation_type FROM hbet.donation_type;"
+
+    cur.execute(query)
+    donation_types = cur.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    donation_type_array=[]
+
+    for row in donation_types:
+        array_value = row["donation_type"]
+        donation_type_array.append(array_value)
+
+    return render(request, 'donation_add_del.html', {'active_user': active_user, 'donation_type_array': donation_type_array })
+
+
+def delete_donation(request, donation_type):
+    
+    cur, conn = for_open_db_connection()
+    
+
+    query= f"DELETE FROM `hbet`.`donation_type` WHERE (`donation_type` = '{donation_type}');"
+    cur.execute(query)
+    conn.commit()
+    conn.close()
+
+    return HttpResponseRedirect('/donation_operations')
+
+
+def add_donation_type(request):
+    if request.method == 'POST':
+        n_don_type = request.POST['n_don_type']
+
+        cur, conn = for_open_db_connection()
+
+        query2= f"INSERT INTO donation_type (donation_type) VALUES ('{n_don_type}');"
+        cur.execute(query2)
+        conn.commit()
+        conn.close()
+
+        return HttpResponseRedirect('/donation_operations')
+
+    else:
+        return HttpResponseRedirect(request.path_info)
+
 
 def my_login_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
@@ -289,8 +340,19 @@ def add_donation(request):
         donor_name_dict[row["full_name"]]["name"] = row["full_name"]
     
     dataJSON = dumps(donor_name_dict)
-  
-    return render(request, "add_donation.html",{'username': session_username,'donor_dict':dataJSON})
+
+    query1= f"SELECT donation_type FROM hbet.donation_type;"
+    cur.execute(query1)
+    do_t = cur.fetchall()
+
+    donation_array=[]
+
+    for row in do_t:
+        array_value = row["donation_type"]
+        donation_array.append(array_value)
+
+
+    return render(request, "add_donation.html",{'username': session_username,'donor_dict':dataJSON, 'donation_array': donation_array })
 
 def insert_donation(request):
     if request.method == 'POST':

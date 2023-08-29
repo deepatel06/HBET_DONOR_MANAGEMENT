@@ -15,5 +15,8 @@ urlpatterns = {
     path('view_donation', views.viewDonation, name='view_donation'),
     path('logout', views.logout_view, name='logout'),
     path('forget_password', views.forget_password, name='forget_password'),
-    path('reset_password', views.reset_password, name='reset_password')
+    path('reset_password', views.reset_password, name='reset_password'),
+    path('add_donation_type', views.add_donation_type, name='add_donation_type'),
+    path('donation_operations', views.donation_operations, name='donation_operations'),
+    path('delete_donation/<donation_type>', views.delete_donation, name='delete_donation'),
 }
