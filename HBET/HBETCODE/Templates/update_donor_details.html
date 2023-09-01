@@ -1,0 +1,104 @@
+{% extends 'main.html' %} 
+{% block title %} View Donor details {% endblock title %}
+
+
+{% block Style %}
+    <style>
+        input{
+            border: none;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+{% endblock Style %}
+    
+
+{% block content %}
+<div class="form-container">
+  {% for message in messages %} <div class="animate__animated
+  animate__bounceInUp" id="" style="color:#fff; background-color: #0322d3;
+  width:25%; margin-top:4px; margin-left:290px; border-radius:30px;
+  text-align:center; padding:10px; >
+  <a class="close" href="#" data-dismiss="alert"></a>
+  {{ message }}
+</div>
+{% endfor %}
+    
+    <h1>Donor Details</h1>
+    <div style="overflow-x: auto;">
+        <table class="table table-bordered" id="do_table" style="width: 100vh; font-size: 1em;">
+            <thead>
+                <tr>
+                    <th scope="col">Edit Button</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Full name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">DOB</th>
+                    <th scope="col">Date of marrage</th>
+                    <th scope="col">spouse Name</th>
+                    <th scope="col">Address 1</th>
+                    <th scope="col">Address 2</th>
+                    <th scope="col">Date of registration</th>
+                    <th scope="col">City</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Pincode</th>
+                    <th scope="col">Mobile 1</th>
+                    <th scope="col">Mobile 2</th>
+                    <th scope="col">Aadhar card</th>
+                    <th scope="col">Pan card</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in donor_details_array %}
+                <tr>
+                    <form method="post" action="/update_doner_details/{{ value.id }}">
+                        {% csrf_token %}
+                        <td> <input type="submit" value="save"/></td>
+                        <td> <input placeholder="Enter first name" name="fname" type="text" value="{{ value.first_name }}" /></td>
+                        <td> <input placeholder="Enter last name" name="lname" type="text" value="{{ value.last_name }}" /></td>
+                        <td> <input placeholder="Enter full name" name="fullname" type="text" value="{{ value.full_name }}" /></td>
+                        <td> <input placeholder="Enter email" name="email" type="text" value="{{ value.email }}" /></td>
+                        <td> <input placeholder="Enter DOB" name="dob" type="date" value="{{ value.dob }}" /></td>
+                        <td> <input placeholder="Enter date of marriage" name="dom" type="date" value="{{ value.dom }}" /></td>
+                        <td> <input placeholder="Enter spouse name" name="spname" type="text" value="{{ value.spouse_name }}" /></td>
+                        <td> <input placeholder="Enter Address 1" name="add1" type="text" value="{{ value.address1 }}" /></td>
+                        <td> <input placeholder="Enter Address 2" name="add2" type="text" value="{{ value.address2 }}" /></td>
+                        <td> <input placeholder="Enter date of registration" name="dor" type="date" value="{{ value.dor }}" /></td>
+                        <td> <input placeholder="Enter city" name="city" type="text" value="{{ value.city }}" /></td>
+                        <td> <input placeholder="Enter state" name="state" type="text" value="{{ value.state }}" /></td>
+                        <td> <input placeholder="Enter pincode" name="pincode" type="number" value="{{ value.pin_code }}" /></td>
+                        <td> <input placeholder="Enter Mobile number" name="mob1" type="number" value="{{ value.mobile1 }}" /></td>
+                        <td> <input placeholder="Enter mobile number" name="mob2" type="number" value="{{ value.mobile2 }}" /></td>
+                        <td> <input placeholder="Enter Aadhar number" name="aacard" type="text" value="{{ value.aadhar_card }}" /></td>
+                        <td> <input placeholder="Enter pan card number" name="pacard" type="text" value="{{ value.pan_card }}" /></td>
+                        <td style="display: none"> <input name="id" type="text" value="{{ value.id }}" readonly/></td>
+                    </form>
+                </tr>
+                {% endfor %} 
+            </tbody>
+        </table>
+    </div>
+    
+
+{% endblock content %}
+
+
+{% block script %}
+    <script src = "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    {% load static %}
+    <script src = "{% static 'datatables/1.10.22/js/jquery.dataTables.min.js' %}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#do_table').DataTable({
+                scrollY: '500px',
+                scrollX: '11px',
+                paging: false,    
+            });
+        });
+    </script>
+{% endblock script %}
+    

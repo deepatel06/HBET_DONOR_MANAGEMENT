@@ -45,8 +45,6 @@ from HBETCODE import models
 from HBETCODE.utilities.db import get_db_connection
 
 
-# Create your views here.
-
 def my_login_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
        
@@ -58,6 +56,161 @@ def my_login_required(view_func):
             return HttpResponseRedirect('/')  # Redirect to login page if not authenticated
     return _wrapped_view
 
+@my_login_required
+def download_excel(request):
+    cur, conn = for_open_db_connection()
+
+    query= f"SELECT * FROM hbet.donor_details;"
+
+    cur.execute(query)
+    donation_details = cur.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    donor_details_array = []
+
+    for row in donation_details:
+        row['aadhar_card'] = str(row['aadhar_card'])
+        donor_details_array.append(row)
+
+    # Create a DataFrame from the data
+    df = pd.DataFrame(donor_details_array)
+
+    # Create a response object
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=donor_details.xlsx'
+
+    # Save the DataFrame to the response as an Excel file
+    df.to_excel(response, index=False, sheet_name='Donor Details')
+
+    return response
+
+@my_login_required
+def donor_details(request):
+    username = request.session['user_name']
+    cur, conn = for_open_db_connection()
+
+    query= f"SELECT * FROM hbet.donor_details;"
+
+    cur.execute(query)
+    donation_details = cur.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    donor_details_array = []
+
+    for row in donation_details:
+        row['dor'] = row['dor'].strftime('%Y-%m-%d')
+        row['dob'] = row['dob'].strftime('%Y-%m-%d')
+        donor_details_array.append(row)
+
+    return render(request, 'donor_details.html', {'donor_details_array': donor_details_array, 'username': username})
+
+
+def update_doner_details_page(request):
+    cur, conn = for_open_db_connection()
+
+    query= f"SELECT * FROM hbet.donor_details;"
+
+    cur.execute(query)
+    donation_details = cur.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    donor_details_array = []
+
+    for row in donation_details:
+        row['dor'] = row['dor'].strftime('%Y-%m-%d')
+        row['dob'] = row['dob'].strftime('%Y-%m-%d')
+        donor_details_array.append(row)
+
+    return render(request, 'update_donor_details.html', {'donor_details_array': donor_details_array})
+
+def update_donor_details(request, id):
+    if request.method == 'POST':
+
+        first_name = request.POST['fname']
+        lname = request.POST['lname']
+        fullname = request.POST['fullname']
+        spname = request.POST['spname']
+        add1 = request.POST['add1']
+        add2 = request.POST['add2']
+        city = request.POST['city']
+        state = request.POST['state']
+        pincode = request.POST['pincode']
+        mob1 = request.POST['mob1']
+        mob2 = request.POST['mob2']
+        aacard = request.POST['aacard']
+        pacard = request.POST['pacard']
+        email = request.POST['email']
+        dob = request.POST['dob']
+        dom = request.POST['dom']
+        dor = request.POST['dor']
+
+        cur, conn = for_open_db_connection()
+        
+
+        query= f"update hbet.donor_details set first_name = '{first_name}', last_name = '{lname}',full_name ='{fullname}', spouse_name = '{spname}',address1 = '{add1}',address2 = '{add2}',city = '{city}',state = '{state}', pin_code = '{pincode}',mobile2 ='{mob2}',mobile1 = '{mob1}',aadhar_card = {aacard}, pan_card='{pacard}',email = '{email}',dob ='{dob}',dom ='{dom}',dor ='{dor}'  where id = '{id}'; "
+        cur.execute(query)
+        conn.commit()
+        conn.close()
+
+        return HttpResponseRedirect('/view_donor_details')
+
+def donation_type_operations(request):
+    active_user = request.session['user_name']
+    
+    cur, conn = for_open_db_connection()
+
+    query= f"SELECT donation_type FROM hbet.donation_type;"
+
+    cur.execute(query)
+    donation_types = cur.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    donation_type_array=[]
+
+    for row in donation_types:
+        array_value = row["donation_type"]
+        donation_type_array.append(array_value)
+
+    return render(request, 'donation_add_del.html', {'username': active_user, 'donation_type_array': donation_type_array })
+
+
+def delete_donation_type(request, donation_type):
+
+    cur, conn = for_open_db_connection()
+    
+    query= f"DELETE FROM `hbet`.`donation_type` WHERE (`donation_type` = '{donation_type}');"
+    cur.execute(query)
+    conn.commit()
+    conn.close()
+
+    return HttpResponseRedirect('/donation_type_operations')
+
+
+def add_donation_type(request):
+    username = request.session['user_name']
+    if request.method == 'POST':
+        n_don_type = request.POST['n_don_type']
+
+        cur, conn = for_open_db_connection()
+
+        query2= f"INSERT INTO donation_type (donation_type) VALUES ('{n_don_type}');"
+        cur.execute(query2)
+        conn.commit()
+        conn.close()
+
+        return HttpResponseRedirect('/donation_type_operations')
+
+    else:
+        return HttpResponseRedirect(request.path_info, {'username': username })
+
 def adminlogin(request):
     return render(request, "admin_login.html")
 
@@ -65,8 +218,6 @@ def forget_password(request):
     if request.method=='POST':
         fpemail1 = request.POST['fpemail'] 
         cur, conn = for_open_db_connection()
-
-     
 
         query= f"SELECT * FROM hbetcode_admin_details WHERE email = '{fpemail1}'; "
         cur.execute(query)
@@ -90,7 +241,6 @@ def forget_password(request):
         smtp.ehlo()
         smtp.starttls()
 
-    # Login with your email and password
         smtp.login('deep@aivantage.org', 'mmxmbdyyeazffslr')
         
         subject = 'Login Credentials'
@@ -148,14 +298,6 @@ def reset_password(request):
     else:
         return render(request, 'reset_password.html')
         
-    
-
-        
-
-
-
-
-
 
 def admin_authentication(request):
     if request.method == 'POST':
@@ -169,7 +311,6 @@ def admin_authentication(request):
                 request.session['user_name'] = user['full_name']
                 print(user['full_name'])
             return HttpResponseRedirect('/donorregistration')
-
 
         else:
             messages.error(request, 'Username or Password not correct')
@@ -213,67 +354,13 @@ def insert_donor_details(request):
 
         messages.success(request, 'Donor Registered successfully.')
         return HttpResponseRedirect('/donorregistration')
-@my_login_required
-def donor_details(request):
-    session_username = request.session['user_name']
-    donor_data = models.DonorDetails.objects.all()
-    return render(request, "donor_details.html", {'rows': donor_data, 'username': session_username}) 
+ 
 
 class DateEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, date):
             return obj.isoformat()
         return super().default(obj)
-@my_login_required    
-def edit_donor_details(request):
-
-    cur, conn = for_open_db_connection()
-
-    query = f"SELECT id, first_name,last_name,full_name,dob,dom,spouse_name,address1,address2,dor,city,state,pin_code,mobile2,mobile1,aadhar_card,pan_card,email FROM hbet.donor_details;"
-    cur.execute(query)
-    donor_data = cur.fetchall()
-    conn.commit()
-    conn.close()
-    dataJSON = dumps(donor_data,cls=DateEncoder)
-    return render(request, "edit_donor_details.html",{'rows': donor_data,'dataJSON': dataJSON})
-@csrf_exempt
-def update_donor_details_db(request):
-
-    if request.method == 'POST':
-        data_q = request.POST.get('data')
-        f_data = json.loads(data_q)
-
-        for i in range(len(f_data)):
-            id = int(f_data[i]['ID'])-1   #because we get start id in db from 1 and in list we get start id from 0
-            first_name= f_data[i]['First Name']
-            last_name = f_data[i]['Last Name']
-            full_name = f_data[i]['Full Name']
-            dob = f_data[i]['Date Of Birth(YYYY-MM-DD)']
-            dom = f_data[i]['Date Of Marriage']
-            spouse_name = f_data[i]['Spouse Name']
-            address1 = f_data[i]['Address 1']
-            address2 = f_data[i]['Address 2']
-            dor = f_data[i]['Date Of Registration']
-            city = f_data[i]['City']
-            state = f_data[i]['State']
-            pin_code = f_data[i]['Pincode']
-            mobile1 = f_data[i]['Mobile Number 1']
-            mobile2 = f_data[i]['Mobile Number 2']
-            aadhar_card = f_data[i]['Aadhar Card Number']
-            pan_card = f_data[i]['Pan Card Number']
-            email = f_data[i]['Email']
-            #password = f_data[i]['Password']
-            
-            cur, conn = for_open_db_connection()
-            query = f"update hbet.donor_details set first_name = '{first_name}', last_name = '{last_name}',full_name ='{full_name}', spouse_name = '{spouse_name}',address1 = '{address1}',address2 = '{address2}',city = '{city}',state = '{state}', pin_code = '{pin_code}',mobile2 ='{mobile2}',mobile1 = '{mobile1}',aadhar_card = {aadhar_card}, pan_card='{pan_card}',email = '{email}',dob ='{dob}',dom ='{dom}',dor ='{dor}'  where id = {id+1}; "
-            
-            cur.execute(query)
-            conn.commit()
-            conn.close()
-
-
-
-    return JsonResponse({'status': 'success'})
 
 @my_login_required
 def add_donation(request):
@@ -289,8 +376,19 @@ def add_donation(request):
         donor_name_dict[row["full_name"]]["name"] = row["full_name"]
     
     dataJSON = dumps(donor_name_dict)
-  
-    return render(request, "add_donation.html",{'username': session_username,'donor_dict':dataJSON})
+
+    query1= f"SELECT donation_type FROM hbet.donation_type;"
+    cur.execute(query1)
+    do_t = cur.fetchall()
+
+    donation_array=[]
+
+    for row in do_t:
+        array_value = row["donation_type"]
+        donation_array.append(array_value)
+
+
+    return render(request, "add_donation.html",{'username': session_username,'donor_dict':dataJSON, 'donation_array': donation_array })
 
 def insert_donation(request):
     if request.method == 'POST':
@@ -336,6 +434,7 @@ def insert_donation(request):
 
         messages.success(request, 'Donation added successfully.')
         return HttpResponseRedirect('/add_donation')
+    
 @my_login_required
 def viewDonation(request):
     donation_data = models.Donation.objects.all()
@@ -343,11 +442,9 @@ def viewDonation(request):
     return render(request, "view_donation.html", {'rows': donation_data,'username': session_username})
 
 def for_open_db_connection():
-
         conn = get_db_connection()
         try:
             cur = conn.cursor(pymysql.cursors.DictCursor)
-
         except Exception as error:
             print(error)
 
@@ -355,7 +452,6 @@ def for_open_db_connection():
 
 def donation_submission(firstname, amount, dod, payment_type, donation_type, email):
     # Send the receipt email
-    
     smtp = smtplib.SMTP('smtp.gmail.com', 587)
     smtp.ehlo()
     smtp.starttls()
@@ -385,9 +481,6 @@ def donation_submission(firstname, amount, dod, payment_type, donation_type, ema
     # Send the email using the smtp server
     smtp.sendmail(from_addr="deep@aivantage.org", to_addrs=to, msg=msg.as_string())
     smtp.quit()
-
-
-
 
 def generate_pdf(template, context):
     template = get_template(template)
@@ -425,7 +518,6 @@ def generate_pdf(template, context):
         ("Type of Donation:", context['type_of_donation']),
         ("Amount:", context['amount']),
         
-    
     ]
 
     y_position = 440
@@ -461,29 +553,18 @@ def generate_pdf(template, context):
     p.setFillColor(colors.green)
     p.drawCentredString(thank_you_x, 100, thank_you_message)
 
-
-
     # Save the page
     p.showPage()
     p.save()
     return response
  
-  
-  
-
-
-
 def logout_view(request):
     # Clear the user's session data
     del request.session['user_email']
         # Log the user out using Django's built-in logout function
     
-    
     # Redirect the user to a specific page (optional)
     return HttpResponseRedirect('/')
-    
-
-
 
 # send our email message 'msg' to our boss
 def message(subject="Thank You!",
@@ -548,4 +629,3 @@ def message(subject="Thank You!",
             # At last, Add the attachment to our message object
             msg.attach(file)
     return msg
-
