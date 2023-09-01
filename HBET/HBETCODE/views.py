@@ -45,7 +45,6 @@ from HBETCODE import models
 from HBETCODE.utilities.db import get_db_connection
 
 
-## I need to remove
 def my_login_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
        
@@ -88,7 +87,7 @@ def download_excel(request):
     return response
 
 @my_login_required
-def see_donor_details(request):
+def donor_details(request):
     username = request.session['user_name']
     cur, conn = for_open_db_connection()
 
@@ -110,7 +109,7 @@ def see_donor_details(request):
     return render(request, 'donor_details.html', {'donor_details_array': donor_details_array, 'username': username})
 
 
-def update_details_page(request):
+def update_doner_details_page(request):
     cur, conn = for_open_db_connection()
 
     query= f"SELECT * FROM hbet.donor_details;"
@@ -160,8 +159,6 @@ def update_donor_details(request, id):
         conn.close()
 
         return HttpResponseRedirect('/view_donor_details')
-
-####################################################################################################################################
 
 def donation_type_operations(request):
     active_user = request.session['user_name']

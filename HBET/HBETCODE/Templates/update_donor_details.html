@@ -50,13 +50,12 @@
                     <th scope="col">Mobile 2</th>
                     <th scope="col">Aadhar card</th>
                     <th scope="col">Pan card</th>
-                    <th scope="col">ID</th>
                 </tr>
             </thead>
             <tbody>
                 {% for value in donor_details_array %}
                 <tr>
-                    <form method="post" action="/update_details/{{ value.id }}">
+                    <form method="post" action="/update_doner_details/{{ value.id }}">
                         {% csrf_token %}
                         <td> <input type="submit" value="save"/></td>
                         <td> <input placeholder="Enter first name" name="fname" type="text" value="{{ value.first_name }}" /></td>

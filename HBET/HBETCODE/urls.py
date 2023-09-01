@@ -20,8 +20,8 @@ urlpatterns = {
     path('donation_type_operations', views.donation_type_operations, name='donation_operations'),
     path('delete_donation_type/<donation_type>', views.delete_donation_type, name='delete_donation'),
     ## I need to remove 
-    path('view_donor_details', views.see_donor_details, name='see_donor_details'),
-    path('update_details', views.update_details_page, name='update_details_page'),
-    path('update_details/<id>', views.update_donor_details, name='update_donor_detail'),
+    path('view_donor_details', views.donor_details, name='see_donor_details'),
+    path('update_donor_details_page', views.update_doner_details_page, name='update_details_page'),
+    path('update_doner_details/<id>', views.update_donor_details, name='update_donor_detail'),
     path('download_donor_details', views.download_excel, name='download_excel'),
 }
