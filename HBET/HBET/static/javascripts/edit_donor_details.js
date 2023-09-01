@@ -1,9 +1,6 @@
-
-  function readTableData(){
-  
+function readTableData(){
       //gets table
       var eTable = document.getElementById('dtable');
-  
       //gets rows of table
       var rowLength = eTable.rows.length;
   
@@ -60,8 +57,7 @@
       }
   });
   }
-  
-   document.getElementById("cancelBtn").addEventListener("click", function() {
+  document.getElementById("cancelBtn").addEventListener("click", function() {
       var confirmCancel = confirm("Are you sure you want to cancel changes?");
       console.log(confirmCancel)
       if (confirmCancel) {
@@ -71,23 +67,15 @@
       } else {
         // Continue with other actions or stay on the same page
       }
-    });
-  
-  
+  });
   function redirect(){
   window.location.href = "/donordetails";
-  
-
 }
 function bid_data(data){
 // Extract value from table header. 
     // ('Book ID', 'Book Name', 'Category' and 'Price')
     let col = ["ID","First Name","Last Name","Full Name","Email","Date Of Birth(YYYY-MM-DD)","Date Of Marriage","Spouse Name","Address 1","Address 2","Date Of Registration","City","State","Pincode","Mobile Number 1","Mobile Number 2","Aadhar Card Number","Pan Card Number","Password"];
-
     let col_db = ["id","first_name","last_name","full_name","email","dob","dom","spouse_name","address1","address2","dor","city","state","pin_code","mobile1","mobile2","aadhar_card","pan_card","password"];
-
-
-
     console.log(col)
     // Create table.
     const table = document.createElement("table");

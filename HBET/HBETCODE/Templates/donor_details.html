@@ -1,336 +1,109 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Donor Details</title>
-  <style>
+{% extends 'main.html' %} 
+{% block title %} View Donor details {% endblock title %}
 
 
-
-
-#dataTable td {
-  text-align: center;
-}
-body {
-      background: url('');
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-
-    .header {
-      background-color: #0322d3;
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-    }
-
-    .menu {
-      display: flex;
-    }
-
-    .menu a {
-      color: #fff;
-      text-decoration: none;
-      margin: 0 10px;
-      margin-top: 5px;
-      inline-size: 230pxs;
-    }
-    .menu a:hover{
-      background-color: #fd0404;
-    }
-
-    .profile-button {
-      background-color: #fd0404;
-      color: #fff;
-      border: none;
-      padding: 10px;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-     .form-container {
-        display: flex;
-    }
-
-    .form-column {
-        flex: 1;
-        padding: 10px;
-    }
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        font-weight: bold;
-    }
-
-    .form-group input,
-    .form-group select {
-        width: 95%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    .form-group input[type="submit"] {
-        background-color: #0322d3;
-        color: white;
-        cursor: pointer;
-        width: 20%;
-    }
-            /* Style for the profile icon */
-            .profile-icon {
-            width: 38px;
-            height: 40px;
-            background-color: #ee1111e3;
-            border-radius: 50%;
-            cursor: pointer;
-            margin-left: 20px;
-            margin-top: 4px;
+{% block Style %}
+    <style>
+        .div_btn_and_head{
+            display: flex;
         }
-
-        .profile-icon img{
-            height: 35px;
-            width: 35px;
-        }
-        
-
-        /* Style for the profile card */
-        .profile-card {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 10px;
-            width: 150px;
-            background-color: #063da1;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            z-index: 1;
-        }
-
-        /* Style for the card text and button */
-        .profile-name {
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .logout-button {
-            background-color: #dc3545;
-            color: #fff;
-            padding: 5px 10px;
+        input{
             border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            margin-bottom: 15px;
         }
-  </style>
-  <link rel="stylesheet" type="text/css" href ="{% static 'datatables/1.10.22/css/jquery.dataTables.min.css' %}">
-</head>
-<body>
-{%block content%}
-  <div class="header">
-    <div class="menu">
-      <a href="/donorregistration">Donor Registration Form</a>
-      <a href = "/donordetails">Donor Details</a>
-      <a href="/add_donation">Add Donation</a>
-      <a href="/view_donation">View Donation </a>
-      <a href="/donation_operations">Add Donation type</a>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+{% endblock Style %}
+    
 
+{% block content %}
+<div class="form-container">
+  {% for message in messages %} <div class="animate__animated
+  animate__bounceInUp" id="" style="color:#fff; background-color: #0322d3;
+  width:25%; margin-top:4px; margin-left:290px; border-radius:30px;
+  text-align:center; padding:10px; >
+  <a class="close" href="#" data-dismiss="alert"></a>
+  {{ message }}
+</div>
+{% endfor %}
+<div class="div_btn_and_head">
+    <div class="buttons">
+        <button style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button" onclick="redirect()">Edit</button>
+        <button id="exportBtn" style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button"><a href="/download_donor_details" style="color:white; text-decoration:none;">Export to CSV</a></button>
     </div>
-        <!-- Profile Icon -->
-        <div class="profile-icon" onclick="toggleProfileCard()">
-          <img src="https://cdn3.iconfinder.com/data/icons/leto-user-group/64/__user_person_profile-64.png" alt="">
-      </div>
-  
-      <!-- Profile Card -->
-      <div class="profile-card" id="profileCard">
-        <div class="profile-name">{{username}}</div>
-        <button class="logout-button" onclick="logout()">Logout</button>
-        <br>
-        
-        <a style="color: #fff;text-decoration: none;background-color: #dc3545; border-radius: 3px; text-align: center; margin-top: 8px;padding: 5px 10px;cursor: pointer;" href="reset_password">Reset Password</a>
-      </div>
-  </div>
+    <h1 style="margin-left: 492px; margin-top: 10px;">Donor Details</h1>
+</div>
+    <div style="overflow-x: auto;">
+        <table class="table" id="do_table" style="width: 100vh; font-size: 1em;">
+            <thead>
+                <tr>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Full name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">DOB</th>
+                    <th scope="col">Date of marrage</th>
+                    <th scope="col">spouse Name</th>
+                    <th scope="col">Address 1</th>
+                    <th scope="col">Address 2</th>
+                    <th scope="col">Date of registration</th>
+                    <th scope="col">City</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Pincode</th>
+                    <th scope="col">Mobile 1</th>
+                    <th scope="col">Mobile 2</th>
+                    <th scope="col">Aadhar card</th>
+                    <th scope="col">Pan card</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in donor_details_array %}
+                <tr>
+                    <td> {{ value.first_name }}</td>
+                    <td> {{ value.last_name }}</td>
+                    <td> {{ value.full_name }}</td>
+                    <td> {{ value.email }}</td>
+                    <td> {{ value.dob }}</td>
+                    <td> {{ value.dom }}</td>
+                    <td> {{ value.spouse_name }}</td>
+                    <td> {{ value.address1 }}</td>
+                    <td> {{ value.address2 }}</td>
+                    <td> {{ value.dor }}</td>
+                    <td> {{ value.city }}</td>
+                    <td> {{ value.state }}</td>
+                    <td> {{ value.pin_code }}</td>
+                    <td> {{ value.mobile1 }}</td>
+                    <td> {{ value.mobile2 }}</td>
+                    <td> {{ value.aadhar_card }}</td>
+                    <td> {{ value.pan_card }}</td>
+                </tr>
+                {% endfor %} 
+            </tbody>
+        </table>
+    </div>
+    
+
+{% endblock content %}
 
 
-<button id="exportBtn" style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button" onclick="exportToExcel()">Export to CSV</button>
-<button style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button" onclick ="redirect()">Edit</button>
-
-   <div id="content">
-
-  <table id="dataTable" class="display nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Date Of Birth</th>
-                <th>Date Of Marriage</th>
-                <th>Spouse Name</th>
-                <th>Address 1</th>
-                <th>Address 2</th>
-                <th>Date Of Registration</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Pincode</th>
-                <th>Mobile Number 1</th>
-                <th>Mobile Number 2</th>
-                <th>Aadhar Card Number</th>
-                <th>Pan Card Number</th>
-
-            </tr>
-        </thead>
-        <tbody>
-
-            {% for data in rows %}
-          <tr>
-            <td>{{ data.first_name }}</td>
-            <td>{{ data.last_name }}</td>
-            <td>{{ data.full_name }}</td>
-            <td>{{ data.email }}</td>
-            <td>{{ data.dob }}</td>
-            <td>{{ data.dom }}</td>
-            <td>{{ data.spouse_name }}</td>
-            <td>{{ data.address1 }}</td>
-            <td>{{ data.address2 }}</td>
-            <td>{{ data.dor }}</td>
-            <td>{{ data.city }}</td>
-            <td>{{ data.state }}</td>
-            <td>{{ data.pin_code }}</td>
-            <td>{{ data.mobile1 }}</td>
-            <td>{{ data.mobile2 }}</td>
-            <td>{{ data.aadhar_card }}</td>
-            <td>{{ data.pan_card }}</td>
-
-          </tr>
-          {% endfor %}
-
-
-
-        </tbody>
-    </table>
-
-
-  </div>
-
- </center>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
- <script src="{% static 'datatables/1.10.22/js/jquery.dataTables.min.js' %}"></script>
-
-  <script>
-
-function downloadExcelFile(data, filename) {
-  var blob = new Blob([data], { type: "application/vnd.ms-excel" });
-  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-    window.navigator.msSaveOrOpenBlob(blob, filename + ".xls");
-  } else {
-    var link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename + ".xls";
-    link.style.display = "none";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-}
-
-function exportToExcel() {
-  var table = document.getElementById("dataTable");
-  var rows = Array.from(table.querySelectorAll("tbody tr"));
-
-  var headers = Array.from(table.querySelectorAll("thead th")).map(function(th) {
-    return th.textContent;
-  });
-
-  var data = [headers.join("\t")];
-
-  rows.forEach(function(row) {
-    var rowData = Array.from(row.children).map(function(cell) {
-      return cell.textContent;
-    });
-    data.push(rowData.join("\t"));
-  });
-
-  var excelData = data.join("\r\n");
-  var filename = "data";
-
-  downloadExcelFile(excelData, filename);
-}
-
-function exportToCSV() {
-
-   var table = document.getElementById("dataTable");
-  var rows = table.querySelectorAll("tbody tr");
-  var headerRow = Array.from(table.querySelectorAll("thead th")).map(function(th) {
-    return th.textContent;
-  });
-  var csvContent = "data:text/csv;charset=utf-8,";
-
-  // Build the header row
-  var csvHeader = headerRow.join(",");
-  csvContent += csvHeader + "\r\n";
-
-  // Build the data rows
-  rows.forEach(function(row) {
-    var rowData = Array.from(row.children).map(function(cell) {
-      return cell.textContent;
-    });
-    var csvRow = rowData.join(",");
-    csvContent += csvRow ;
-  });
-
-  // Create a CSV file and trigger the download
-  var encodedUri = encodeURI(csvContent);
-  var link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "data.csv");
-  document.body.appendChild(link);
-  link.click();
-}
-
-
-
-$(document).ready(function() {
-  $('#dataTable').DataTable({
-
-      scrollY: '500px',
-      scrollX: '11px',
-      paging: false,
-
-
-    });
-});
-
-function redirect(){
-window.location.href = "/editdonordetails";
-
-}
- // Function to toggle the profile card visibility
- function toggleProfileCard() {
-            var profileCard = document.getElementById("profileCard");
-            if (profileCard.style.display === "block") {
-                profileCard.style.display = "none";
-            } else {
-                profileCard.style.display = "block";
-            }
+{% block script %}
+    <script src = "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    {% load static %}
+    <script src = "{% static 'datatables/1.10.22/js/jquery.dataTables.min.js' %}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#do_table').DataTable({
+                scrollY: '500px',
+                scrollX: '11px',
+                paging: false,    
+            });
+        });
+        function redirect() {
+            window.location.href = "/update_details";
         }
-
-        // Function to handle logout action (implement your logout logic here)
-        function logout() {
-          
-            // For this example, we'll just hide the profile card
-            var profileCard = document.getElementById("profileCard");
-            profileCard.style.display = "none";
-            window.location.href = "/logout";
-        }
-  </script>
-{% endblock %}
-</body>
-</html>
+    </script>
+{% endblock script %}
+    
