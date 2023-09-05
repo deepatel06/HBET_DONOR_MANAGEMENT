@@ -16,6 +16,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 from .models import Donation  # import your Donation model
+from datetime import datetime
 
 
 
@@ -294,24 +295,64 @@ def update_donor_details_db(request):
         data_q = request.POST.get('data')
         f_data = json.loads(data_q)
 
+
         for i in range(len(f_data)):
+
+            month_dict = {
+                'Jan.': '01',
+                'Feb.': '02',
+                'March': '03',
+                'April': '04',
+                'May': '05',
+                'June': '06',
+                'July': '07',
+                'Aug.': '08',
+                'Sept.': '09',
+                'Oct.': '10',
+                'Nov.': '11',
+                'Dec.': '12'
+            }
+
             id = int(f_data[i]['ID'])-1   #because we get start id in db from 1 and in list we get start id from 0
             first_name= f_data[i]['First Name']
             last_name = f_data[i]['Last Name']
-            full_name = f_data[i]['Full Name']
-            dob = f_data[i]['Date Of Birth(YYYY-MM-DD)']
-            dom = f_data[i]['Date Of Marriage']
-            spouse_name = f_data[i]['Spouse Name']
+            full_name = f_data[i]['Full name']
+            dobfound = f_data[i]['DOB']
+            parts = dobfound.split(' ')
+
+            # Extract the month, day, and year
+            month = month_dict[parts[0]]
+            day = parts[1][:-1]  # Remove the comma from the day
+            year = parts[2]
+
+            # Create a new date string in the format "%Y-%m-%d"
+            formatted_date_string = f"{year}-{month}-{day}"
+            dob = datetime.strptime(formatted_date_string, "%Y-%m-%d")
+
+            dom = f_data[i]['Date of marrage']
+            spouse_name = f_data[i]['spouse Name']
             address1 = f_data[i]['Address 1']
             address2 = f_data[i]['Address 2']
-            dor = f_data[i]['Date Of Registration']
+
+            dorfound = f_data[i]['Date of registration']
+            parts2 = dorfound.split(' ')
+
+            # Extract the month, day, and year
+            month2 = month_dict[parts[0]]
+            day2 = parts[1][:-1]  # Remove the comma from the day
+            year2 = parts[2]
+
+            # Create a new date string in the format "%Y-%m-%d"
+            formatted_date_string2 = f"{year2}-{month2}-{day2}"
+            dor = datetime.strptime(formatted_date_string2, "%Y-%m-%d")
+
             city = f_data[i]['City']
             state = f_data[i]['State']
             pin_code = f_data[i]['Pincode']
-            mobile1 = f_data[i]['Mobile Number 1']
-            mobile2 = f_data[i]['Mobile Number 2']
-            aadhar_card = f_data[i]['Aadhar Card Number']
-            pan_card = f_data[i]['Pan Card Number']
+            mobile1 = f_data[i]['Mobile 1']
+            mobile2 = f_data[i]['Mobile 2']
+            aadhar_card = f_data[i]['Aadhar card']
+            pan_card = f_data[i]['Pan card']
             email = f_data[i]['Email']
             #password = f_data[i]['Password']
             

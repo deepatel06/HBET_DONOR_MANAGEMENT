@@ -118,6 +118,9 @@ tr{
         cursor: pointer;
         width: 20%;
     }
+    td{
+      border: 1px solid gray;
+  }
   </style>
   <link rel="stylesheet" type="text/css" href ="{% static 'datatables/1.10.22/css/jquery.dataTables.min.css' %}">
 </head>
@@ -129,31 +132,76 @@ tr{
       <a href = "/donordetails">Donor Details</a>
       <a href="/add_donation">Add donation</a>
       <a href="/view_donation">View Donation </a>
+      <a href="/donation_operations">Add donation type </a>
     </div>
-    
   </div>
 
- <button style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button" onclick="readTableData()">Save Changes</button>
+<button class="profile-button" onclick="readTableData()">Save Changes</button>
 <button class="profile-button" id="cancelBtn">Cancel Changes</button>
 <button class="profile-button" onclick ="redirect()">Back to Donor Details</button>
 
    <div id="content">
 <center><h1>Edit Donor Details</h1></center>
-  <div id="dataTable" class="display nowrap" style="width:100%" >
-           
-  
-  </div>
-
-
-  </div>
-
+    <div style="overflow-x: auto;">
+        <table class="table table-bordered" id="dtable" class="display nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Full name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">DOB</th>
+                    <th scope="col">Date of marrage</th>
+                    <th scope="col">spouse Name</th>
+                    <th scope="col">Address 1</th>
+                    <th scope="col">Address 2</th>
+                    <th scope="col">Date of registration</th>
+                    <th scope="col">City</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Pincode</th>
+                    <th scope="col">Mobile 1</th>
+                    <th scope="col">Mobile 2</th>
+                    <th scope="col">Aadhar card</th>
+                    <th scope="col">Pan card</th>
+                    <th scope="col">ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in rows %}
+                <tr>
+                        <td contenteditable>{{ value.first_name }}</td>
+                        <td contenteditable>{{ value.last_name }}</td>
+                        <td contenteditable>{{ value.full_name }}</td>
+                        <td contenteditable>{{ value.email }}</td>
+                        <td contenteditable>{{ value.dob }}</td>
+                        <td contenteditable>{{ value.dom }}</td>
+                        <td contenteditable>{{ value.spouse_name }}</td>
+                        <td contenteditable>{{ value.address1 }}</td>
+                        <td contenteditable>{{ value.address2 }}</td>
+                        <td contenteditable>{{ value.dor }}</td>
+                        <td contenteditable>{{ value.city }}</td>
+                        <td contenteditable>{{ value.state }}</td>
+                        <td contenteditable>{{ value.pin_code }}</td>
+                        <td contenteditable>{{ value.mobile1 }}</td>
+                        <td contenteditable>{{ value.mobile2 }}</td>
+                        <td contenteditable>{{ value.aadhar_card }}</td>
+                        <td contenteditable>{{ value.pan_card }}</td>
+                        <td>{{ value.id }}</td>
+                </tr>
+                {% endfor %} 
+            </tbody>
+        </table>
+    </div>
  </center>
 
- <script>
-  var data = JSON.parse("{{dataJSON|escapejs}}")
- </script>
  
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+ <script>
+   var data = JSON.parse("{{dataJSON|escapejs}}")
+</script>
+  
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="{% static 'datatables/1.10.22/js/jquery.dataTables.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'javascripts/edit_donor_details.js' %}"></script>
 {% endblock %}
