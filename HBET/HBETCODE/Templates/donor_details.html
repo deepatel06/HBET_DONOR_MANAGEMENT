@@ -32,7 +32,7 @@
 <div class="div_btn_and_head">
     <div class="buttons">
         <button style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button" onclick="redirect()">Edit</button>
-        <button id="exportBtn" style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button"><a href="/download_donor_details" style="color:white; text-decoration:none;">Export to CSV</a></button>
+        <button id="exportBtn" style="margin-left : 10px; margin-top: 10px; margin-bottom: 10px" class="profile-button"><a href="/download_donor_details" style="text-decoration:none; color: white;">Export to CSV</a></button>
     </div>
     <h1 style="margin-left: 492px; margin-top: 10px;">Donor Details</h1>
 </div>
@@ -60,7 +60,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for value in donor_details_array %}
+                {% for value in rows %}
                 <tr>
                     <td> {{ value.first_name }}</td>
                     <td> {{ value.last_name }}</td>
@@ -102,7 +102,7 @@
             });
         });
         function redirect() {
-            window.location.href = "/update_donor_details_page";
+            window.location.href = "/editdonordetails";
         }
     </script>
 {% endblock script %}
